@@ -1,0 +1,2 @@
+export declare function getOffsetAnimationElement(animation: __esri.CIMSymbolAnimationOffset, layer: __esri.CIMSymbolLayer): SVGAnimateTransformElement | null;
+//# sourceMappingURL=animation-offset.d.ts.map

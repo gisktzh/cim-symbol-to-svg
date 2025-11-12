@@ -1,0 +1,433 @@
+{
+  "data": {
+    "type": "CIMSymbolReference",
+    "symbol": {
+      "type": "CIMPointSymbol",
+      "symbolLayers": [
+        {
+          "type": "CIMVectorMarker",
+          "enable": true,
+          "anchorPointUnits": "Relative",
+          "dominantSizeAxis3D": "Y",
+          "size": 10,
+          "billboardMode3D": "FaceNearPlane",
+          "frame": {
+            "xmin": 0,
+            "ymin": 0,
+            "xmax": 54,
+            "ymax": 59
+          },
+          "markerGraphics": [
+            {
+              "type": "CIMMarkerGraphic",
+              "geometry": {
+                "paths": [
+                  [
+                    [36.86, 23.92],
+                    [38.86, 14.82],
+                    [37.95, 11.32],
+                    [37.43, 7.74],
+                    [37.3, 4.12],
+                    [35.18, 1.88],
+                    [35.18, 0.5],
+                    [42.57, 0.5]
+                  ]
+                ]
+              },
+              "symbol": {
+                "type": "CIMPolygonSymbol",
+                "symbolLayers": [
+                  {
+                    "type": "CIMSolidStroke",
+                    "enable": true,
+                    "capStyle": "Butt",
+                    "joinStyle": "Miter",
+                    "lineStyle3D": "Strip",
+                    "miterLimit": 10,
+                    "width": 1,
+                    "color": [77, 77, 77, 255]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CIMMarkerGraphic",
+              "geometry": {
+                "paths": [
+                  [
+                    [18.92, 27.47],
+                    [19.9, 26.4],
+                    [21.08, 25.41],
+                    [22.44, 24.53],
+                    [23.94, 23.77],
+                    [25.54, 23.15],
+                    [27.2, 22.7],
+                    [28.87, 22.42],
+                    [30.51, 22.33],
+                    [32.47, 22.48],
+                    [34.4, 22.91],
+                    [36.24, 23.62],
+                    [37.95, 24.58],
+                    [39.51, 25.79]
+                  ]
+                ]
+              },
+              "symbol": {
+                "type": "CIMPolygonSymbol",
+                "symbolLayers": [
+                  {
+                    "type": "CIMSolidStroke",
+                    "enable": true,
+                    "capStyle": "Butt",
+                    "joinStyle": "Miter",
+                    "lineStyle3D": "Strip",
+                    "miterLimit": 10,
+                    "width": 1,
+                    "color": [77, 77, 77, 255]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CIMMarkerGraphic",
+              "geometry": {
+                "paths": [
+                  [
+                    [18.7, 31.1],
+                    [18.7, 28.9],
+                    [19.6, 23],
+                    [19.9, 18.1],
+                    [19.9, 18.1],
+                    [19.5, 14.6],
+                    [18.7, 11.2],
+                    [16.8, 5.2],
+                    [16.8, 3.4],
+                    [19.1, 2.5],
+                    [20.1, 1.1],
+                    [20.1, 0.6],
+                    [12.8, 0.6],
+                    [11.2, 2.1],
+                    [9.9, 8],
+                    [9.1, 13.9],
+                    [8.8, 19.9],
+                    [9, 25.7],
+                    [7.8, 33.2],
+                    [7.8, 39.9],
+                    [7.8, 40.9],
+                    [8, 41.8],
+                    [8.3, 42.7],
+                    [8.8, 43.5],
+                    [9.4, 44.3],
+                    [10.1, 44.9]
+                  ]
+                ]
+              },
+              "symbol": {
+                "type": "CIMPolygonSymbol",
+                "symbolLayers": [
+                  {
+                    "type": "CIMSolidStroke",
+                    "enable": true,
+                    "capStyle": "Butt",
+                    "joinStyle": "Miter",
+                    "lineStyle3D": "Strip",
+                    "miterLimit": 10,
+                    "width": 1,
+                    "color": [77, 77, 77, 255]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CIMMarkerGraphic",
+              "geometry": {
+                "paths": [
+                  [
+                    [4.7, 39.3],
+                    [4.7, 33.2],
+                    [5.8, 25.7],
+                    [5.7, 19.9],
+                    [6, 13.9],
+                    [6.8, 8],
+                    [8.1, 2.1],
+                    [9.5, 0.6],
+                    [12.8, 0.6]
+                  ]
+                ]
+              },
+              "symbol": {
+                "type": "CIMPolygonSymbol",
+                "symbolLayers": [
+                  {
+                    "type": "CIMSolidStroke",
+                    "enable": true,
+                    "capStyle": "Butt",
+                    "joinStyle": "Miter",
+                    "lineStyle3D": "Strip",
+                    "miterLimit": 10,
+                    "width": 1,
+                    "color": [77, 77, 77, 255]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CIMMarkerGraphic",
+              "geometry": {
+                "paths": [
+                  [
+                    [39.1, 28.6],
+                    [39.1, 28.6],
+                    [40.6, 21.6],
+                    [43.1, 14.8],
+                    [43.1, 9.4],
+                    [44, 4.1],
+                    [42.7, 1.9],
+                    [42.7, 0.5],
+                    [51.6, 0.5],
+                    [52.3, 4.1],
+                    [52.6, 7.7],
+                    [52.4, 11.1],
+                    [51.7, 14.5],
+                    [52.3, 17.8],
+                    [53.2, 24.7],
+                    [53.5, 31.6],
+                    [53.3, 33.8],
+                    [52.6, 35.9],
+                    [51.6, 38],
+                    [50.2, 39.8],
+                    [48.6, 41.3],
+                    [46.8, 42.4],
+                    [44.9, 43],
+                    [42.9, 43.2],
+                    [35.5, 43.2],
+                    [21.7, 48.9],
+                    [16.3, 56.6],
+                    [14.5, 58],
+                    [12.3, 58.5],
+                    [11.6, 58.5],
+                    [10.9, 58.3],
+                    [10.3, 58.1],
+                    [9.4, 57.4],
+                    [2.7, 50.4],
+                    [3.2, 48.3],
+                    [3.2, 46.7],
+                    [3.2, 46.7],
+                    [2.4, 46.3],
+                    [1.6, 45.8],
+                    [1.1, 45.1],
+                    [0.8, 44.3],
+                    [0.6, 43.5],
+                    [0.5, 42.7],
+                    [0.5, 42],
+                    [0.7, 41.3],
+                    [0.9, 40.7],
+                    [1.2, 40.1],
+                    [1.7, 39.6],
+                    [2.2, 39.1],
+                    [5, 39.3],
+                    [7.8, 39.9],
+                    [7.8, 39.9]
+                  ]
+                ]
+              },
+              "symbol": {
+                "type": "CIMPolygonSymbol",
+                "symbolLayers": [
+                  {
+                    "type": "CIMSolidStroke",
+                    "enable": true,
+                    "capStyle": "Butt",
+                    "joinStyle": "Miter",
+                    "lineStyle3D": "Strip",
+                    "miterLimit": 10,
+                    "width": 1,
+                    "color": [77, 77, 77, 255]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CIMMarkerGraphic",
+              "geometry": {
+                "paths": [
+                  [
+                    [21.66, 48.9],
+                    [20.87, 44.87]
+                  ]
+                ]
+              },
+              "symbol": {
+                "type": "CIMPolygonSymbol",
+                "symbolLayers": [
+                  {
+                    "type": "CIMSolidStroke",
+                    "enable": true,
+                    "capStyle": "Butt",
+                    "joinStyle": "Miter",
+                    "lineStyle3D": "Strip",
+                    "miterLimit": 10,
+                    "width": 1,
+                    "color": [77, 77, 77, 255]
+                  }
+                ]
+              }
+            }
+          ],
+          "scaleSymbolsProportionally": true,
+          "respectFrame": true,
+          "clippingPath": {
+            "type": "CIMClippingPath",
+            "clippingType": "Intersect",
+            "path": {
+              "rings": [
+                [
+                  [0, 0],
+                  [54, 0],
+                  [54, 59],
+                  [0, 59],
+                  [0, 0]
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "CIMVectorMarker",
+          "enable": true,
+          "anchorPointUnits": "Relative",
+          "dominantSizeAxis3D": "Z",
+          "size": 10,
+          "billboardMode3D": "FaceNearPlane",
+          "frame": {
+            "xmin": 0,
+            "ymin": 0,
+            "xmax": 53.2,
+            "ymax": 58.2
+          },
+          "markerGraphics": [
+            {
+              "type": "CIMMarkerGraphic",
+              "geometry": {
+                "rings": [
+                  [
+                    [51.3, 0],
+                    [51.3, 0.1],
+                    [52, 3.6],
+                    [52.3, 7.1],
+                    [52.1, 10.6],
+                    [51.4, 14.1],
+                    [52, 17.4],
+                    [52.9, 24.3],
+                    [53.2, 31.2],
+                    [53, 33.6],
+                    [52.3, 35.9],
+                    [51.1, 38],
+                    [49.6, 39.9],
+                    [48.4, 40.9],
+                    [47.1, 41.8],
+                    [45.7, 42.4],
+                    [44.2, 42.8],
+                    [42.6, 42.9],
+                    [35.2, 42.9],
+                    [21.4, 48.6],
+                    [16.1, 56.2],
+                    [15.5, 56.8],
+                    [14.8, 57.3],
+                    [14, 57.7],
+                    [13.2, 58],
+                    [12.4, 58.1],
+                    [11.5, 58.2],
+                    [10.6, 58],
+                    [9.8, 57.8],
+                    [9, 57.1],
+                    [4.8, 53.1],
+                    [2.2, 50.1],
+                    [2.2, 50],
+                    [2.8, 47.9],
+                    [2.8, 46.4],
+                    [2, 46],
+                    [1.3, 45.5],
+                    [0.8, 44.9],
+                    [0.4, 44.2],
+                    [0.1, 43.5],
+                    [0, 42.7],
+                    [0, 41.9],
+                    [0.1, 41.2],
+                    [0.4, 40.4],
+                    [0.7, 39.7],
+                    [1.2, 39.1],
+                    [1.8, 38.6],
+                    [1.8, 38.6],
+                    [4.2, 38.7],
+                    [4.2, 32.8],
+                    [5.3, 25.3],
+                    [5.2, 19.6],
+                    [5.8, 10.6],
+                    [7.6, 1.7],
+                    [7.6, 1.6],
+                    [9.1, 0.1],
+                    [19.9, 0.1],
+                    [19.9, 0.7],
+                    [18.8, 2.2],
+                    [16.5, 3.1],
+                    [16.5, 4.7],
+                    [18.4, 10.7],
+                    [19.2, 14.1],
+                    [19.6, 17.6],
+                    [19.6, 20.1],
+                    [19.3, 22.6],
+                    [18.7, 26.7],
+                    [21.1, 24.6],
+                    [23.9, 23.1],
+                    [26.9, 22.1],
+                    [30.1, 21.8],
+                    [32.3, 22],
+                    [34.4, 22.5],
+                    [36.4, 23.4],
+                    [38.4, 14.5],
+                    [37.2, 9.2],
+                    [36.8, 3.8],
+                    [34.7, 1.6],
+                    [34.7, 0],
+                    [51.3, 0]
+                  ]
+                ]
+              },
+              "symbol": {
+                "type": "CIMPolygonSymbol",
+                "symbolLayers": [
+                  {
+                    "type": "CIMSolidFill",
+                    "enable": true,
+                    "color": [102, 102, 102, 255]
+                  }
+                ]
+              }
+            }
+          ],
+          "scaleSymbolsProportionally": true,
+          "respectFrame": true,
+          "clippingPath": {
+            "type": "CIMClippingPath",
+            "clippingType": "Intersect",
+            "path": {
+              "rings": [
+                [
+                  [0, 0],
+                  [53.2, 0],
+                  [53.2, 58.2],
+                  [0, 58.2],
+                  [0, 0]
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "haloSize": 1,
+      "scaleX": 1,
+      "angleAlignment": "Display"
+    }
+  }
+}

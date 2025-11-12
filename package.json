@@ -1,0 +1,46 @@
+{
+  "name": "@gisktzh/cim-symbol-to-svg",
+  "version": "0.0.0",
+  "description": "Library to convert @arcgis/core CIM symbols to SVGs",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "node ./esbuild.config.mjs && tsc --emitDeclarationOnly --outDir dist",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "format": "prettier --write ."
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "FS GIS, Kanton Zürich",
+  "license": "BSD 3-Clause License",
+  "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "@types/jsdom": "^27.0.0",
+    "@types/node": "^24.9.1",
+    "esbuild": "^0.25.11",
+    "eslint": "^9.38.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.4.0",
+    "jiti": "^2.6.1",
+    "jsdom": "^27.0.1",
+    "prettier": "3.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.2",
+    "vitest": "^4.0.3"
+  },
+  "dependencies": {
+    "@arcgis/core": "^4.33.10"
+  }
+}

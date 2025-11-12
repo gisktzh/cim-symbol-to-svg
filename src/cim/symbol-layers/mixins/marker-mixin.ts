@@ -1,0 +1,47 @@
+import { createAttr } from '../../../utils/attr'
+import { AbstractCIMSymbolLayerTransformer } from '../abstract-cim-symbol-layer-transformer'
+import type { AbstractConstructor } from './types'
+
+export function MarkerMixin<
+  T extends AbstractConstructor<
+    AbstractCIMSymbolLayerTransformer<
+      __esri.CIMPictureMarker | __esri.CIMVectorMarker
+    >
+  >,
+>(Base: T) {
+  abstract class MixinClass extends Base {
+    getRotationAttrs() {
+      const attrs: Attr[] = []
+
+      if (this.layer.rotation) {
+        attrs.push(
+          createAttr(
+            'transform',
+            `rotate(${(this.layer.rotateClockwise ? 1 : -1) * this.layer.rotation})`
+          )
+        )
+
+        if (this.layer.anchorPoint) {
+          let unit = ''
+          if (
+            this.layer.anchorPointUnits &&
+            this.layer.anchorPointUnits === 'Relative'
+          ) {
+            unit = '%'
+          }
+
+          attrs.push(
+            createAttr(
+              'transform-origin',
+              `${this.layer.anchorPoint.x}${unit} ${this.layer.anchorPoint.y}${unit}`
+            )
+          )
+        }
+      }
+
+      return attrs
+    }
+  }
+
+  return MixinClass
+}

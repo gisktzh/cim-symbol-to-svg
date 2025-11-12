@@ -1,0 +1,2 @@
+export declare function getRotationAnimationElement(animation: __esri.CIMSymbolAnimationRotation, layer: __esri.CIMSymbolLayer): SVGAnimateTransformElement | null;
+//# sourceMappingURL=animation-rotation.d.ts.map
