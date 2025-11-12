@@ -19,7 +19,7 @@ We currently do not offer this library on npmjs, since it's still WIP and is sub
 - Include the library's main function:
 
   ```
-  import { cimSymbolToSVG } from 'gisktzh/cim-to-svg'
+  import cimSymbolToSVG from '@gisktzh/cim-symbol-to-svg'
   ```
 
 - Use it, for example, with a loaded `WebSymbol`:
@@ -69,3 +69,5 @@ Everything else _should_ work according to specs.
 If you want to contribute to this library, please feel free to open Pull Requests or Issues here on Github.
 
 ## License
+
+BSD 3-Clause License, see `LICENSE.md`
