@@ -18,7 +18,7 @@ export function MarkerMixin<
           createAttr(
             'transform',
             `rotate(${(this.layer.rotateClockwise ? 1 : -1) * this.layer.rotation})`
-          )
+          ),
         )
 
         if (this.layer.anchorPoint) {
@@ -34,6 +34,13 @@ export function MarkerMixin<
             createAttr(
               'transform-origin',
               `${this.layer.anchorPoint.x}${unit} ${this.layer.anchorPoint.y}${unit}`
+            )
+          )
+        } else {
+          attrs.push(
+            createAttr(
+              'transform-origin',
+              'center',
             )
           )
         }

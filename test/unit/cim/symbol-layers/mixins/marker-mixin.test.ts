@@ -31,6 +31,7 @@ describe('MarkerMixin', () => {
     )
     expect(instance.getRotationAttrs()).toEqual([
       createAttr('transform', 'rotate(45)'),
+      createAttr('transform-origin', 'center'),
     ])
   })
 
@@ -41,6 +42,7 @@ describe('MarkerMixin', () => {
     )
     expect(instance.getRotationAttrs()).toEqual([
       createAttr('transform', 'rotate(-30)'),
+      createAttr('transform-origin', 'center'),
     ])
   })
 
