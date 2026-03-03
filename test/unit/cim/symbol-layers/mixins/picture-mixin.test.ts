@@ -1,12 +1,12 @@
 import { describe, it, expect, vi } from 'vitest'
 import { PictureMixin } from '@/cim/symbol-layers/mixins/picture-mixin'
 import { AbstractCIMSymbolLayerTransformer } from '@/cim/symbol-layers/abstract-cim-symbol-layer-transformer'
-import * as svgEl from '@/utils/svg-el'
+import * as svgUtils from '@/utils/svg-el'
 import * as logging from '@/utils/logging'
+import { CIMPictureMarker } from '@arcgis/core/symbols/cim/types'
 
 describe('PictureMixin', () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const Base = class extends AbstractCIMSymbolLayerTransformer<any> {
+  const Base = class extends AbstractCIMSymbolLayerTransformer<CIMPictureMarker> {
     getSvgAttrs() {
       return []
     }
@@ -18,75 +18,103 @@ describe('PictureMixin', () => {
   const MixinClass = PictureMixin(Base)
 
   it('should create a pattern with image inside', () => {
-    const createElSpy = vi.spyOn(svgEl, 'createEl')
-
-    const fakeImage = { setAttribute: vi.fn() } as unknown as SVGImageElement
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const fakePattern = { appendChild: vi.fn(), setAttribute: vi.fn() } as any
-
-    createElSpy.mockImplementation((tag: string) =>
-      tag === 'image' ? fakeImage : fakePattern
+    const createElSpy = vi.spyOn(svgUtils, 'createEl')
+    const fakeEl = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'pattern'
     )
+    createElSpy.mockReturnValue(fakeEl)
+    const appendChildSpy = vi
+      .spyOn(fakeEl, 'appendChild')
+      .mockImplementation((n) => n)
+    const setAttributeSpy = vi
+      .spyOn(fakeEl, 'setAttribute')
+      .mockImplementation(() => {})
 
     const globals = { defs: [], dimensions: { width: -1, height: -1 } }
-    const layer = { url: 'https://example.com/img.png' }
+    const layer: CIMPictureMarker = {
+      type: 'CIMPictureMarker',
+      url: 'https://example.com/img.png',
+      size: 0,
+      enable: true,
+    }
     const instance = new MixinClass(layer, globals)
 
     const uuid = instance.transformPicture(100, 200)
 
     expect(createElSpy).toHaveBeenCalledWith('image')
     expect(createElSpy).toHaveBeenCalledWith('pattern')
-    expect(fakePattern.appendChild).toHaveBeenCalledWith(fakeImage)
-    expect(fakePattern.setAttribute).toHaveBeenCalledWith('width', '100')
-    expect(fakePattern.setAttribute).toHaveBeenCalledWith('height', '200')
-    expect(fakePattern.setAttribute).toHaveBeenCalledWith(
+    expect(appendChildSpy).toHaveBeenCalledWith(fakeEl)
+    expect(setAttributeSpy).toHaveBeenCalledWith('width', '100')
+    expect(setAttributeSpy).toHaveBeenCalledWith('height', '200')
+    expect(setAttributeSpy).toHaveBeenCalledWith(
       'patternUnits',
       'userSpaceOnUse'
     )
-    expect(fakePattern.setAttribute).toHaveBeenCalledWith('id', uuid)
-    expect(globals.defs).toContain(fakePattern)
+    expect(setAttributeSpy).toHaveBeenCalledWith('id', uuid)
+    expect(globals.defs).toContain(fakeEl)
   })
 
   it('should create an image element with the right attributes', () => {
-    const createElSpy = vi.spyOn(svgEl, 'createEl')
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const fakeImage = { setAttribute: vi.fn() } as any
+    const createElSpy = vi.spyOn(svgUtils, 'createEl')
+    const fakeImage = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'rect'
+    )
     createElSpy.mockReturnValue(fakeImage)
 
-    const instance = new MixinClass(
-      { url: 'https://example.com/img.png' },
-      { defs: [], dimensions: { width: -1, height: -1 } }
-    )
+    const spy = vi.spyOn(fakeImage, 'setAttribute')
+
+    const layer: CIMPictureMarker = {
+      type: 'CIMPictureMarker',
+      url: 'https://example.com/img.png',
+      size: 0,
+      enable: true,
+    }
+
+    const instance = new MixinClass(layer, {
+      defs: [],
+      dimensions: { width: -1, height: -1 },
+    })
     const el = instance.getImageEl()
 
     expect(el).toBe(fakeImage)
-    expect(fakeImage.setAttribute).toHaveBeenCalledWith(
-      'href',
-      'https://example.com/img.png'
-    )
-    expect(fakeImage.setAttribute).toHaveBeenCalledWith(
+
+    expect(spy).toHaveBeenCalledWith('href', 'https://example.com/img.png')
+    expect(spy).toHaveBeenCalledWith(
       'xlink:href',
       'https://example.com/img.png'
     )
-    expect(fakeImage.setAttribute).toHaveBeenCalledWith(
-      'crossorigin',
-      'anonymous'
-    )
+    expect(spy).toHaveBeenCalledWith('crossorigin', 'anonymous')
   })
 
   it('should warn when colorSubstitutions is present', () => {
-    const createElSpy = vi.spyOn(svgEl, 'createEl')
     const warnSpy = vi.spyOn(logging, 'warn').mockImplementation(() => {})
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const fakeImage = { setAttribute: vi.fn() } as any
+    const createElSpy = vi.spyOn(svgUtils, 'createEl')
+    const fakeImage = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'rect'
+    )
     createElSpy.mockReturnValue(fakeImage)
 
-    const instance = new MixinClass(
-      { url: 'img.png', colorSubstitutions: true },
-      { defs: [], dimensions: { width: -1, height: -1 } }
-    )
+    const layer: CIMPictureMarker = {
+      type: 'CIMPictureMarker',
+      url: 'https://example.com/img.png',
+      size: 0,
+      enable: true,
+      colorSubstitutions: [
+        {
+          oldColor: [255, 0, 0, 255],
+          newColor: [0, 255, 0, 255],
+        },
+      ],
+    }
+
+    const instance = new MixinClass(layer, {
+      defs: [],
+      dimensions: { width: -1, height: -1 },
+    })
     instance.getImageEl()
 
     expect(warnSpy).toHaveBeenCalledWith(

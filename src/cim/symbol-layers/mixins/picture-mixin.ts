@@ -1,15 +1,20 @@
+import {
+  CIMPictureFill,
+  CIMPictureMarker,
+  CIMPictureStroke,
+} from '@arcgis/core/symbols/cim/types'
 import { warn } from '../../../utils/logging'
 import { createEl } from '../../../utils/svg-el'
 import { AbstractCIMSymbolLayerTransformer } from '../abstract-cim-symbol-layer-transformer'
 import type { AbstractConstructor } from './types'
 
 export function PictureMixin<
-  T extends AbstractConstructor<
+  C extends AbstractConstructor<
     AbstractCIMSymbolLayerTransformer<
-      __esri.CIMPictureFill | __esri.CIMPictureMarker | __esri.CIMPictureStroke
+      CIMPictureFill | CIMPictureMarker | CIMPictureStroke
     >
   >,
->(Base: T) {
+>(Base: C) {
   abstract class MixinClass extends Base {
     transformPicture(width?: number, height?: number) {
       const image = this.getImageEl()

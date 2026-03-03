@@ -3,6 +3,7 @@ import { innerSymbolToSvg } from '@/cim/symbols'
 import * as cimSymbolLayers from '@/cim/symbol-layers'
 import { warn } from '@/utils/logging'
 import type { Globals } from '@/index'
+import { CIMPointSymbol, CIMVectorMarker } from '@arcgis/core/symbols/cim/types'
 
 vi.mock('@/utils/svg-el', () => ({
   createEl: vi.fn((tag: string) =>
@@ -35,10 +36,12 @@ describe('innerSymbolToSvg', () => {
   })
 
   it('should warn when symbol without layers is provided', () => {
-    innerSymbolToSvg(
-      { symbolLayers: undefined } as unknown as __esri.CIMPointSymbol,
-      globals
-    )
+    const symbol: CIMPointSymbol = {
+      type: 'CIMPointSymbol',
+      symbolLayers: undefined,
+    }
+
+    innerSymbolToSvg(symbol, globals)
 
     expect(warn).toHaveBeenCalledWith(
       'Symbol without layers given - on purpose?'
@@ -46,15 +49,18 @@ describe('innerSymbolToSvg', () => {
   })
 
   it('should set dimensions and create svg when CIMVectorMarker is provided', () => {
-    const symbol = {
-      symbolLayers: [
-        {
-          enable: true,
-          frame: { xmin: 0, xmax: 10, ymin: 0, ymax: 10 },
-          type: 'CIMVectorMarker',
-        },
-      ],
-    } as unknown as __esri.CIMPointSymbol
+    const marker: CIMVectorMarker = {
+      type: 'CIMVectorMarker',
+      enable: true,
+      frame: { xmin: 0, xmax: 10, ymin: 0, ymax: 10 },
+      markerGraphics: [],
+      size: 0,
+    }
+
+    const symbol: CIMPointSymbol = {
+      symbolLayers: [marker],
+      type: 'CIMPointSymbol',
+    }
 
     const mockSvgElement = document.createElementNS(
       'http://www.w3.org/2000/svg',
@@ -73,15 +79,18 @@ describe('innerSymbolToSvg', () => {
   })
 
   it('should append defs to svg if globals.defs has elements', () => {
-    const symbol = {
+    const symbol: CIMPointSymbol = {
+      type: 'CIMPointSymbol',
       symbolLayers: [
         {
+          type: 'CIMVectorMarker',
           enable: true,
           frame: { xmin: 0, xmax: 10, ymin: 0, ymax: 10 },
-          type: 'CIMVectorMarker',
+          size: 10,
+          markerGraphics: [],
         },
       ],
-    } as unknown as __esri.CIMPointSymbol
+    }
 
     globals.defs.push(
       document.createElementNS('http://www.w3.org/2000/svg', 'defs')
@@ -97,9 +106,10 @@ describe('innerSymbolToSvg', () => {
   })
 
   it('should handle an empty symbolLayers array', () => {
-    const symbol = {
+    const symbol: CIMPointSymbol = {
+      type: 'CIMPointSymbol',
       symbolLayers: [],
-    } as unknown as __esri.CIMPointSymbol
+    }
 
     const svg = innerSymbolToSvg(symbol, globals)
 
@@ -108,20 +118,25 @@ describe('innerSymbolToSvg', () => {
   })
 
   it('should correctly calculate the max width and height for multiple vector marker layers', () => {
-    const symbol = {
+    const symbol: CIMPointSymbol = {
+      type: 'CIMPointSymbol',
       symbolLayers: [
         {
+          type: 'CIMVectorMarker',
           enable: true,
           frame: { xmin: 0, xmax: 5, ymin: 0, ymax: 5 },
-          type: 'CIMVectorMarker',
+          size: 10,
+          markerGraphics: [],
         },
         {
+          type: 'CIMVectorMarker',
           enable: true,
           frame: { xmin: 0, xmax: 10, ymin: 0, ymax: 10 },
-          type: 'CIMVectorMarker',
+          size: 10,
+          markerGraphics: [],
         },
       ],
-    } as unknown as __esri.CIMPointSymbol
+    }
 
     innerSymbolToSvg(symbol, globals)
 

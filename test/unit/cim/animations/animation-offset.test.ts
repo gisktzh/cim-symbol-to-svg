@@ -8,36 +8,34 @@ vi.mock('@/utils/svg-el', () => ({
 }))
 
 import { createEl } from '@/utils/svg-el'
+import {
+  CIMHatchFill,
+  CIMPictureFill,
+  CIMPictureMarker,
+  CIMSymbolAnimationOffset,
+  CIMVectorMarker,
+} from '@arcgis/core/symbols/cim/types'
 
 describe('getOffsetAnimationElement', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  it('returns null for unsupported layer types', () => {
-    const animation = {
-      offsetX: 10,
-      offsetY: 20,
-    } as unknown as __esri.CIMSymbolAnimationOffset
-    const layer = {
-      type: 'CIMSolidFill',
-      offsetX: 0,
-      offsetY: 0,
-    } as unknown as __esri.CIMSymbolLayer
-
-    const result = getOffsetAnimationElement(animation, layer)
-    expect(result).toBeNull()
-    expect(createEl).not.toHaveBeenCalled()
-  })
-
   it('creates an animateTransform element for supported layers with no existing offsets', () => {
-    const animation = {
+    const animation: CIMSymbolAnimationOffset = {
+      type: 'CIMSymbolAnimationOffset',
       offsetX: 15,
       offsetY: 25,
-    } as unknown as __esri.CIMSymbolAnimationOffset
-    const layer = { type: 'CIMHatchFill' } as unknown as __esri.CIMSymbolLayer
+    }
+    const layer: CIMHatchFill = {
+      type: 'CIMHatchFill',
+      lineSymbol: {
+        type: 'CIMLineSymbol',
+      },
+      enable: false,
+    }
 
-    const el = getOffsetAnimationElement(animation, layer) as SVGElement
+    const el = getOffsetAnimationElement(animation, layer)
 
     expect(createEl).toHaveBeenCalledWith('animateTransform')
     expect(el.tagName).toBe('animateTransform')
@@ -48,45 +46,65 @@ describe('getOffsetAnimationElement', () => {
   })
 
   it('respects existing layer offsets', () => {
-    const animation = {
+    const animation: CIMSymbolAnimationOffset = {
+      type: 'CIMSymbolAnimationOffset',
       offsetX: 20,
       offsetY: 30,
-    } as unknown as __esri.CIMSymbolAnimationOffset
-    const layer = {
+    }
+    const layer: CIMPictureMarker = {
       type: 'CIMPictureMarker',
       offsetX: 5,
       offsetY: 10,
-    } as unknown as __esri.CIMSymbolLayer
+      url: '',
+      size: 0,
+      enable: true,
+    }
 
-    const el = getOffsetAnimationElement(animation, layer) as SVGElement
+    const el = getOffsetAnimationElement(animation, layer)
 
     expect(el.getAttribute('to')).toBe('15 20') // 20 - 5 and 30 - 10
   })
 
   it('handles only offsetX defined', () => {
-    const animation = {
+    const animation: CIMSymbolAnimationOffset = {
+      type: 'CIMSymbolAnimationOffset',
       offsetX: 12,
-    } as unknown as __esri.CIMSymbolAnimationOffset
-    const layer = {
+      offsetY: 0,
+    }
+    const layer: CIMVectorMarker = {
       type: 'CIMVectorMarker',
       offsetX: 2,
-    } as unknown as __esri.CIMSymbolLayer
+      frame: {
+        xmin: 0,
+        ymin: 0,
+        xmax: 0,
+        ymax: 0,
+      },
+      markerGraphics: [],
+      size: 0,
+      enable: false,
+    }
 
-    const el = getOffsetAnimationElement(animation, layer) as SVGElement
+    const el = getOffsetAnimationElement(animation, layer)
 
     expect(el.getAttribute('to')).toBe('10 0')
   })
 
   it('handles only offsetY defined', () => {
-    const animation = {
+    const animation: CIMSymbolAnimationOffset = {
+      type: 'CIMSymbolAnimationOffset',
       offsetY: 8,
-    } as unknown as __esri.CIMSymbolAnimationOffset
-    const layer = {
+      offsetX: 0,
+    }
+    const layer: CIMPictureFill = {
       type: 'CIMPictureFill',
       offsetY: 3,
-    } as unknown as __esri.CIMSymbolLayer
+      url: '',
+      height: 0,
+      enable: false,
+    }
 
-    const el = getOffsetAnimationElement(animation, layer) as SVGElement
+    const el = getOffsetAnimationElement(animation, layer)
 
     expect(el.getAttribute('to')).toBe('0 5')
   })

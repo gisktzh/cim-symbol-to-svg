@@ -4,25 +4,22 @@ import { transformMarkerGraphicToSvg } from '@/cim/graphics/cim-marker-graphic'
 import type { Globals } from '@/index'
 
 vi.mock('@/cim/symbols/cim-line-symbol', () => ({
-  cimLineSymbolToSvg: vi.fn(
-    (_symbol: __esri.CIMLineSymbol, _globals: Globals) =>
-      document.createElementNS('http://www.w3.org/2000/svg', 'line')
+  cimLineSymbolToSvg: vi.fn((_symbol: CIMLineSymbol, _globals: Globals) =>
+    document.createElementNS('http://www.w3.org/2000/svg', 'line')
   ),
 }))
 vi.mock('@/cim/symbols/cim-point-symbol', () => ({
-  cimPointSymbolToSvg: vi.fn(
-    (_symbol: __esri.CIMPointSymbol, _globals: Globals) =>
-      document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+  cimPointSymbolToSvg: vi.fn((_symbol: CIMPointSymbol, _globals: Globals) =>
+    document.createElementNS('http://www.w3.org/2000/svg', 'circle')
   ),
 }))
 vi.mock('@/cim/symbols/cim-polygon-symbol', () => ({
-  cimPolygonSymbolToSvg: vi.fn(
-    (_symbol: __esri.CIMPolygonSymbol, _globals: Globals) =>
-      document.createElementNS('http://www.w3.org/2000/svg', 'path')
+  cimPolygonSymbolToSvg: vi.fn((_symbol: CIMPolygonSymbol, _globals: Globals) =>
+    document.createElementNS('http://www.w3.org/2000/svg', 'path')
   ),
 }))
 vi.mock('@/cim/symbols/cim-text-symbol', () => ({
-  cimTextSymbolToSvg: vi.fn((_symbol: __esri.CIMTextSymbol, _text: string) =>
+  cimTextSymbolToSvg: vi.fn((_symbol: CIMTextSymbol, _text: string) =>
     document.createElementNS('http://www.w3.org/2000/svg', 'text')
   ),
 }))
@@ -31,10 +28,19 @@ import { cimLineSymbolToSvg } from '@/cim/symbols/cim-line-symbol'
 import { cimPointSymbolToSvg } from '@/cim/symbols/cim-point-symbol'
 import { cimPolygonSymbolToSvg } from '@/cim/symbols/cim-polygon-symbol'
 import { cimTextSymbolToSvg } from '@/cim/symbols/cim-text-symbol'
+import {
+  CIMLineSymbol,
+  CIMMarkerGraphic,
+  CIMPointSymbol,
+  CIMPolygonSymbol,
+  CIMTextSymbol,
+} from '@arcgis/core/symbols/cim/types'
+import Extent from '@arcgis/core/geometry/Extent'
 
 const globals: Globals = {
   dimensions: { width: 100, height: 50 },
-} as Globals
+  defs: [],
+}
 
 describe('transformMarkerGraphicToSvg', () => {
   beforeEach(() => {
@@ -42,12 +48,14 @@ describe('transformMarkerGraphicToSvg', () => {
   })
 
   it('delegates to cimLineSymbolToSvg for CIMLineSymbol', () => {
-    const graphic = {
+    const graphic: CIMMarkerGraphic = {
+      type: 'CIMMarkerGraphic',
       symbol: { type: 'CIMLineSymbol' },
-    } as __esri.CIMMarkerGraphic
+      geometry: undefined,
+    }
     const el = transformMarkerGraphicToSvg(
       graphic,
-      {} as __esri.Envelope,
+      { xmin: 0, ymin: 0, xmax: 100, ymax: 100 },
       globals
     )
     expect(cimLineSymbolToSvg).toHaveBeenCalledWith(graphic.symbol, globals)
@@ -55,12 +63,14 @@ describe('transformMarkerGraphicToSvg', () => {
   })
 
   it('delegates to cimPointSymbolToSvg for CIMPointSymbol', () => {
-    const graphic = {
+    const graphic: CIMMarkerGraphic = {
+      type: 'CIMMarkerGraphic',
       symbol: { type: 'CIMPointSymbol' },
-    } as __esri.CIMMarkerGraphic
+      geometry: undefined,
+    }
     const el = transformMarkerGraphicToSvg(
       graphic,
-      {} as __esri.Envelope,
+      { xmin: 0, ymin: 0, xmax: 100, ymax: 100 },
       globals
     )
     expect(cimPointSymbolToSvg).toHaveBeenCalledWith(graphic.symbol, globals)
@@ -68,13 +78,15 @@ describe('transformMarkerGraphicToSvg', () => {
   })
 
   it('delegates to cimTextSymbolToSvg for CIMTextSymbol', () => {
-    const graphic = {
+    const graphic: CIMMarkerGraphic = {
+      type: 'CIMMarkerGraphic',
       symbol: { type: 'CIMTextSymbol' },
       textString: 'Hello',
-    } as __esri.CIMMarkerGraphic
+      geometry: undefined,
+    }
     const el = transformMarkerGraphicToSvg(
       graphic,
-      {} as __esri.Envelope,
+      { xmin: 0, ymin: 0, xmax: 100, ymax: 100 },
       globals
     )
     expect(cimTextSymbolToSvg).toHaveBeenCalledWith(graphic.symbol, 'Hello')
@@ -82,7 +94,8 @@ describe('transformMarkerGraphicToSvg', () => {
   })
 
   it('delegates to cimPolygonSymbolToSvg and sets "d" attribute if geometry has rings', () => {
-    const graphic = {
+    const graphic: CIMMarkerGraphic = {
+      type: 'CIMMarkerGraphic',
       symbol: { type: 'CIMPolygonSymbol' },
       geometry: {
         rings: [
@@ -92,11 +105,11 @@ describe('transformMarkerGraphicToSvg', () => {
           ],
         ],
       },
-    } as unknown as __esri.CIMMarkerGraphic
+    }
 
     const el = transformMarkerGraphicToSvg(
       graphic,
-      { xmin: 0, ymin: 0, xmax: 100, ymax: 100 } as __esri.Envelope,
+      { xmin: 0, ymin: 0, xmax: 100, ymax: 100 },
       globals
     )
     expect(cimPolygonSymbolToSvg).toHaveBeenCalledWith(graphic.symbol, globals)
@@ -106,7 +119,8 @@ describe('transformMarkerGraphicToSvg', () => {
   })
 
   it('delegates to cimPolygonSymbolToSvg and sets "d" attribute if geometry has paths', () => {
-    const graphic = {
+    const graphic: CIMMarkerGraphic = {
+      type: 'CIMMarkerGraphic',
       symbol: { type: 'CIMPolygonSymbol' },
       geometry: {
         paths: [
@@ -116,11 +130,11 @@ describe('transformMarkerGraphicToSvg', () => {
           ],
         ],
       },
-    } as unknown as __esri.CIMMarkerGraphic
+    }
 
     const el = transformMarkerGraphicToSvg(
       graphic,
-      { xmin: 0, ymin: 0, xmax: 100, ymax: 100 } as __esri.Envelope,
+      { xmin: 0, ymin: 0, xmax: 100, ymax: 100 },
       globals
     )
     expect(cimPolygonSymbolToSvg).toHaveBeenCalledWith(graphic.symbol, globals)
@@ -130,12 +144,14 @@ describe('transformMarkerGraphicToSvg', () => {
   })
 
   it('returns cimPolygonSymbolToSvg element if no geometry', () => {
-    const graphic = {
+    const graphic: CIMMarkerGraphic = {
+      type: 'CIMMarkerGraphic',
       symbol: { type: 'CIMPolygonSymbol' },
-    } as __esri.CIMMarkerGraphic
+      geometry: undefined,
+    }
     const el = transformMarkerGraphicToSvg(
       graphic,
-      {} as __esri.Envelope,
+      { xmin: 0, ymin: 0, xmax: 100, ymax: 100 },
       globals
     )
     expect(cimPolygonSymbolToSvg).toHaveBeenCalled()

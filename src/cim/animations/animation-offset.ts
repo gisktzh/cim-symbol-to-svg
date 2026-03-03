@@ -1,19 +1,15 @@
+import {
+  CIMHatchFill,
+  CIMMarker,
+  CIMPictureFill,
+  CIMSymbolAnimationOffset,
+} from '@arcgis/core/symbols/cim/types'
 import { createEl } from '../../utils/svg-el'
 
 export function getOffsetAnimationElement(
-  animation: __esri.CIMSymbolAnimationOffset,
-  layer: __esri.CIMSymbolLayer
+  animation: CIMSymbolAnimationOffset,
+  layer: CIMMarker | CIMPictureFill | CIMHatchFill
 ) {
-  if (
-    layer.type !== 'CIMHatchFill' &&
-    layer.type !== 'CIMPictureFill' &&
-    layer.type !== 'CIMPictureMarker' &&
-    layer.type !== 'CIMVectorMarker'
-  ) {
-    // All other layer types do not support offset animation
-    return null
-  }
-
   let toOffsetX = 0
   let toOffsetY = 0
 

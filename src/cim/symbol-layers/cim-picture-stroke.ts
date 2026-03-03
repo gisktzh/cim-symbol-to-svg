@@ -1,15 +1,10 @@
 import { AbstractCIMSymbolLayerTransformer } from './abstract-cim-symbol-layer-transformer'
 import { StrokeMixin } from './mixins/stroke-mixin'
 import { PictureMixin } from './mixins/picture-mixin'
-
-export function isCIMPictureStroke(
-  layer: __esri.CIMSymbolLayer
-): layer is __esri.CIMPictureStroke {
-  return layer.type === 'CIMPictureStroke'
-}
+import { CIMPictureStroke } from '@arcgis/core/symbols/cim/types'
 
 export class CIMPictureStrokeTransformer extends PictureMixin(
-  StrokeMixin(AbstractCIMSymbolLayerTransformer<__esri.CIMPictureStroke>)
+  StrokeMixin(AbstractCIMSymbolLayerTransformer<CIMPictureStroke>)
 ) {
   getSvgAttrs() {
     const pictureUuid = this.transformPicture()

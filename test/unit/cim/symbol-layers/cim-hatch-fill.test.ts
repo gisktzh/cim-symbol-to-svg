@@ -1,11 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import {
-  CIMHatchFillTransformer,
-  isCIMHatchFill,
-} from '@/cim/symbol-layers/cim-hatch-fill'
+import { CIMHatchFillTransformer } from '@/cim/symbol-layers/cim-hatch-fill'
 import * as svgElUtils from '@/utils/svg-el'
 import * as cimLineSymbol from '@/cim/symbols/cim-line-symbol'
 import { Globals } from '@/index'
+import { CIMHatchFill } from '@arcgis/core/symbols/cim/types'
 
 describe('CIMHatchFillTransformer', () => {
   const fakeDefs: SVGDefsElement[] = []
@@ -14,30 +12,18 @@ describe('CIMHatchFillTransformer', () => {
     defs: fakeDefs,
   }
 
-  const fakeLayer = {
+  const fakeLayer: CIMHatchFill = {
     type: 'CIMHatchFill',
     lineSymbol: { type: 'CIMLineSymbol' },
     separation: 5,
     offsetX: 2,
     offsetY: 3,
     rotation: 45,
-  } as unknown as __esri.CIMHatchFill
+    enable: true,
+  }
 
   beforeEach(() => {
     fakeDefs.length = 0
-  })
-
-  it('should detect CIMHatchFill layer', () => {
-    expect(
-      isCIMHatchFill({
-        type: 'CIMHatchFill',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(true)
-    expect(
-      isCIMHatchFill({
-        type: 'CIMSolidFill',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(false)
   })
 
   it('should create pattern and transform fill', () => {

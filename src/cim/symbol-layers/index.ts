@@ -8,11 +8,9 @@ import { CIMHatchFillTransformer } from './cim-hatch-fill'
 import { CIMGradientStrokeTransformer } from './cim-gradient-stroke'
 import { CIMGradientFillTransformer } from './cim-gradient-fill'
 import { Globals } from '../..'
+import { CIMSymbolLayerUnion } from '@arcgis/core/symbols/cim/types'
 
-function getTransformer<T extends __esri.CIMSymbolLayer>(
-  layer: T,
-  globals: Globals
-) {
+function getTransformer(layer: CIMSymbolLayerUnion, globals: Globals) {
   switch (layer.type) {
     case 'CIMGradientFill':
       return new CIMGradientFillTransformer(layer, globals)
@@ -36,7 +34,7 @@ function getTransformer<T extends __esri.CIMSymbolLayer>(
 }
 
 export function cimSymbolLayerToSvgAttrs(
-  layer: __esri.CIMSymbolLayer,
+  layer: CIMSymbolLayerUnion,
   globals: Globals
 ) {
   const transformer = getTransformer(layer, globals)
@@ -45,7 +43,7 @@ export function cimSymbolLayerToSvgAttrs(
 }
 
 export function cimSymbolLayerToSvgElement(
-  layer: __esri.CIMSymbolLayer,
+  layer: CIMSymbolLayerUnion,
   globals: Globals
 ) {
   const transformer = getTransformer(layer, globals)

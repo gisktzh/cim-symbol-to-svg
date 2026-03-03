@@ -1,10 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import {
-  CIMSolidFillTransformer,
-  isCIMSolidFill,
-} from '@/cim/symbol-layers/cim-solid-fill'
+import { CIMSolidFillTransformer } from '@/cim/symbol-layers/cim-solid-fill'
 import * as animationsModule from '@/cim/animations'
 import type { Globals } from '@/index'
+import { CIMSolidFill } from '@arcgis/core/symbols/cim/types'
 
 describe('CIMSolidFillTransformer', () => {
   const fakeDefs: SVGDefsElement[] = []
@@ -13,27 +11,20 @@ describe('CIMSolidFillTransformer', () => {
     defs: fakeDefs,
   }
 
-  const fakeLayer = {
+  const fakeLayer: CIMSolidFill = {
     type: 'CIMSolidFill',
     color: [255, 0, 0, 255],
-    animations: [{ type: 'fade', duration: 1000 }],
-  } as unknown as __esri.CIMSolidFill
+    animations: [
+      {
+        type: 'CIMSymbolAnimationColor',
+        toColor: [255, 255, 255, 255],
+      },
+    ],
+    enable: true,
+  }
 
   beforeEach(() => {
     fakeDefs.length = 0
-  })
-
-  it('should detect CIMSolidFill layer', () => {
-    expect(
-      isCIMSolidFill({
-        type: 'CIMSolidFill',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(true)
-    expect(
-      isCIMSolidFill({
-        type: 'CIMPictureFill',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(false)
   })
 
   it('should transform solid fill to SVG attributes', () => {

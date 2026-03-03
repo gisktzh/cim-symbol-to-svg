@@ -1,10 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import {
-  CIMVectorMarkerTransformer,
-  isCIMVectorMarker,
-} from '@/cim/symbol-layers/cim-vector-marker'
+import { CIMVectorMarkerTransformer } from '@/cim/symbol-layers/cim-vector-marker'
 import * as graphicsModule from '@/cim/graphics/cim-marker-graphic'
 import type { Globals } from '@/index'
+import { CIMVectorMarker } from '@arcgis/core/symbols/cim/types'
 
 describe('CIMVectorMarkerTransformer', () => {
   const fakeDefs: SVGDefsElement[] = []
@@ -13,36 +11,31 @@ describe('CIMVectorMarkerTransformer', () => {
     defs: fakeDefs,
   }
 
-  const fakeGraphic = document.createElementNS(
-    'http://www.w3.org/2000/svg',
-    'circle'
-  )
-  const fakeLayer = {
+  const fakeLayer: CIMVectorMarker = {
     type: 'CIMVectorMarker',
-    markerGraphics: [fakeGraphic],
-    frame: 0,
+    markerGraphics: [
+      {
+        type: 'CIMMarkerGraphic',
+        geometry: undefined,
+      },
+    ],
     offsetX: 5,
     offsetY: 10,
     rotation: 45,
     rotateClockwise: true,
-    animations: [{ type: 'fade', duration: 1000 }],
-  } as unknown as __esri.CIMVectorMarker
+    animations: [{ type: 'CIMSymbolAnimationSize', toSize: 12 }],
+    frame: {
+      xmin: 0,
+      ymin: 0,
+      xmax: 0,
+      ymax: 0,
+    },
+    size: 0,
+    enable: false,
+  }
 
   beforeEach(() => {
     fakeDefs.length = 0
-  })
-
-  it('should detect CIMVectorMarker layer', () => {
-    expect(
-      isCIMVectorMarker({
-        type: 'CIMVectorMarker',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(true)
-    expect(
-      isCIMVectorMarker({
-        type: 'CIMPictureMarker',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(false)
   })
 
   it('should return empty SVG attrs', () => {

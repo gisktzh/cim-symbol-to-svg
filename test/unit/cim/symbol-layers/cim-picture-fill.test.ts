@@ -1,11 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import {
-  CIMPictureFillTransformer,
-  isCIMPictureFill,
-} from '@/cim/symbol-layers/cim-picture-fill'
+import { CIMPictureFillTransformer } from '@/cim/symbol-layers/cim-picture-fill'
 import * as svgElUtils from '@/utils/svg-el'
 import * as logging from '@/utils/logging'
 import type { Globals } from '@/index'
+import { CIMPictureFill } from '@arcgis/core/symbols/cim/types'
 
 describe('CIMPictureFillTransformer', () => {
   const fakeDefs: SVGDefsElement[] = []
@@ -14,27 +12,18 @@ describe('CIMPictureFillTransformer', () => {
     defs: fakeDefs,
   }
 
-  const fakeLayer = {
+  const fakeLayer: CIMPictureFill = {
     type: 'CIMPictureFill',
     url: 'http://example.com/image.png',
-    colorSubstitutions: [{ from: [255, 0, 0, 255], to: [0, 255, 0, 255] }],
-  } as unknown as __esri.CIMPictureFill
+    colorSubstitutions: [
+      { oldColor: [255, 0, 0, 255], newColor: [0, 255, 0, 255] },
+    ],
+    height: 0,
+    enable: true,
+  }
 
   beforeEach(() => {
     fakeDefs.length = 0
-  })
-
-  it('should detect CIMPictureFill layer', () => {
-    expect(
-      isCIMPictureFill({
-        type: 'CIMPictureFill',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(true)
-    expect(
-      isCIMPictureFill({
-        type: 'CIMSolidFill',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(false)
   })
 
   it('should create a pattern and transform fill', () => {

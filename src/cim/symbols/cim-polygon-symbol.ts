@@ -1,43 +1,43 @@
-import { isCIMGradientFill } from '@/cim/symbol-layers/cim-gradient-fill'
-import { createAttr } from '@/utils/attr'
+import { CIMPolygonSymbol } from '@arcgis/core/symbols/cim/types'
+import { createAttr } from '../../utils/attr'
 import { Globals } from '../..'
 import { createEl } from '../../utils/svg-el'
 import { cimSymbolLayerToSvgAttrs } from '../symbol-layers'
-import { isCIMHatchFill } from '../symbol-layers/cim-hatch-fill'
-import { isCIMPictureFill } from '../symbol-layers/cim-picture-fill'
-import { isCIMSolidFill } from '../symbol-layers/cim-solid-fill'
-import { isCIMSolidStroke } from '../symbol-layers/cim-solid-stroke'
-import { isCIMPictureStroke } from '../symbol-layers/cim-picture-stroke'
-import { isCIMGradientStroke } from '../symbol-layers/cim-gradient-stroke'
+import { isCIMHatchFill } from '../../typeguards/cim-hatch-fill'
+import { isCIMPictureFill } from '../../typeguards/cim-picture-fill'
+import { isCIMSolidFill } from '../../typeguards/cim-solid-fill'
+import { isCIMGradientFill } from '../../typeguards/cim-gradient-fill'
+import { isCIMStroke } from '@/typeguards/cim-stroke'
 
 export function cimPolygonSymbolToSvg(
-  symbol: __esri.CIMPolygonSymbol,
+  symbol: CIMPolygonSymbol,
   globals: Globals
 ): SVGPathElement {
   const el = createEl('path')
-  const attrs = symbol.symbolLayers
-    .filter((l) => l.enable)
-    .map((layer) => cimSymbolLayerToSvgAttrs(layer, globals))
-    .flat()
+  const attrs =
+    symbol.symbolLayers
+      ?.filter((l) => l.enable)
+      .map((layer) => cimSymbolLayerToSvgAttrs(layer, globals))
+      .flat() || []
 
   if (
-    symbol.symbolLayers.filter(
-      (l) =>
-        isCIMGradientFill(l) ||
-        isCIMSolidFill(l) ||
-        isCIMHatchFill(l) ||
-        isCIMPictureFill(l) ||
-        isCIMGradientFill(l)
-    ).length === 0
+    symbol.symbolLayers
+      ?.filter(
+        (l) =>
+          isCIMGradientFill(l) ||
+          isCIMSolidFill(l) ||
+          isCIMHatchFill(l) ||
+          isCIMPictureFill(l) ||
+          isCIMGradientFill(l)
+      )
+      .filter((l) => l.enable).length === 0
   ) {
     attrs.push(createAttr('fill', 'none'))
   }
 
   if (
-    symbol.symbolLayers.filter(
-      (l) =>
-        isCIMSolidStroke(l) || isCIMPictureStroke(l) || isCIMGradientStroke(l)
-    ).length === 0
+    symbol.symbolLayers?.filter((l) => isCIMStroke(l)).filter((l) => l.enable)
+      .length === 0
   ) {
     attrs.push(createAttr('stroke', 'none'))
   }

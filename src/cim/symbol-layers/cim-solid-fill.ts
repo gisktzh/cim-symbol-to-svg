@@ -1,15 +1,10 @@
 import { AbstractCIMSymbolLayerTransformer } from './abstract-cim-symbol-layer-transformer'
 import { FillMixin } from './mixins/fill-mixin'
 import { AnimationsMixin } from './mixins/animations-mixin'
-
-export function isCIMSolidFill(
-  layer: __esri.CIMSymbolLayer
-): layer is __esri.CIMSolidFill {
-  return layer.type === 'CIMSolidFill'
-}
+import { CIMSolidFill } from '@arcgis/core/symbols/cim/types'
 
 export class CIMSolidFillTransformer extends AnimationsMixin(
-  FillMixin(AbstractCIMSymbolLayerTransformer<__esri.CIMSolidFill>)
+  FillMixin(AbstractCIMSymbolLayerTransformer<CIMSolidFill>)
 ) {
   getSvgAttrs() {
     return this.transformFill(this.layer.color)
@@ -18,6 +13,6 @@ export class CIMSolidFillTransformer extends AnimationsMixin(
   getSvgElements() {
     const animations = this.getAnimationElements()
 
-    return animations ? animations : null
+    return animations.length > 0 ? animations : null
   }
 }

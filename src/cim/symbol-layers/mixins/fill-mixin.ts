@@ -1,19 +1,13 @@
+import { CIMFill } from '@arcgis/core/symbols/cim/types'
 import { createAttr } from '../../../utils/attr'
 import { rgbaArrayToHex } from '../../../utils/color'
 import { AbstractCIMSymbolLayerTransformer } from '../abstract-cim-symbol-layer-transformer'
 import type { AbstractConstructor } from './types'
 
 export function FillMixin<
-  T extends AbstractConstructor<
-    AbstractCIMSymbolLayerTransformer<
-      | __esri.CIMGradientFill
-      | __esri.CIMGradientStroke
-      | __esri.CIMHatchFill
-      | __esri.CIMPictureFill
-      | __esri.CIMSolidFill
-    >
-  >,
->(Base: T) {
+  C extends AbstractConstructor<AbstractCIMSymbolLayerTransformer<T>>,
+  T extends CIMFill,
+>(Base: C) {
   abstract class MixinClass extends Base {
     transformFill(fillValue: string | number[]) {
       const attrs = []

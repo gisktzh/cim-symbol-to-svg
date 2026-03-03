@@ -1,7 +1,8 @@
+import { CIMSymbolLayer } from '@arcgis/core/symbols/cim/types'
 import { Globals } from '../..'
 
 export abstract class AbstractCIMSymbolLayerTransformer<
-  T extends __esri.CIMSymbolLayer = __esri.CIMSymbolLayer,
+  T extends CIMSymbolLayer = CIMSymbolLayer,
 > {
   constructor(
     public layer: T,

@@ -4,29 +4,30 @@ import * as cimSymbolLayers from '@/cim/symbol-layers'
 import { Globals } from '@/index'
 import * as svgElUtils from '@/utils/svg-el'
 import { createAttr } from '../../../test-utils/attr'
+import {
+  CIMPictureMarker,
+  CIMPointSymbol,
+} from '@arcgis/core/symbols/cim/types'
 
 describe('cimPointSymbolToSvg', () => {
   const globals: Globals = { defs: [], dimensions: { width: -1, height: -1 } }
 
   it('should create a <use> element with correct attributes based on enabled symbol layers', () => {
-    const mockLayer = {
-      enable: true,
+    const mockLayer: CIMPictureMarker = {
       type: 'CIMPictureMarker',
+      enable: true,
       url: 'https://example.com/image.png',
       size: 20,
-    } as unknown as __esri.CIMPictureMarker
+    }
 
-    const mockSymbol = {
+    const mockSymbol: CIMPointSymbol = {
+      type: 'CIMPointSymbol',
       symbolLayers: [mockLayer],
-    } as unknown as __esri.CIMPointSymbol
+    }
 
     const createElSpy = vi.spyOn(svgElUtils, 'createEl')
-    createElSpy.mockImplementation(
-      (tag: string) =>
-        document.createElementNS(
-          'http://www.w3.org/2000/svg',
-          tag
-        ) as SVGElement
+    createElSpy.mockImplementation((tag: string) =>
+      document.createElementNS('http://www.w3.org/2000/svg', tag)
     )
 
     const spyAttrs = vi
@@ -49,17 +50,21 @@ describe('cimPointSymbolToSvg', () => {
   })
 
   it('should not add any attributes when there are no enabled layers', () => {
-    const mockSymbol = {
-      symbolLayers: [{ enable: false }],
-    } as unknown as __esri.CIMPointSymbol
+    const mockSymbol: CIMPointSymbol = {
+      type: 'CIMPointSymbol',
+      symbolLayers: [
+        {
+          type: 'CIMPictureMarker',
+          enable: false,
+          url: 'https://example.com/image.png',
+          size: 20,
+        },
+      ],
+    }
 
     const createElSpy = vi.spyOn(svgElUtils, 'createEl')
-    createElSpy.mockImplementation(
-      (tag: string) =>
-        document.createElementNS(
-          'http://www.w3.org/2000/svg',
-          tag
-        ) as SVGElement
+    createElSpy.mockImplementation((tag: string) =>
+      document.createElementNS('http://www.w3.org/2000/svg', tag)
     )
 
     const svgUse = cimPointSymbolToSvg(mockSymbol, globals)
@@ -71,31 +76,28 @@ describe('cimPointSymbolToSvg', () => {
   })
 
   it('should handle multiple enabled layers correctly', () => {
-    const mockLayer1 = {
-      enable: true,
+    const mockLayer1: CIMPictureMarker = {
       type: 'CIMPictureMarker',
+      enable: true,
       url: 'https://example.com/image1.png',
       size: 20,
-    } as unknown as __esri.CIMPictureMarker
+    }
 
-    const mockLayer2 = {
-      enable: true,
+    const mockLayer2: CIMPictureMarker = {
       type: 'CIMPictureMarker',
+      enable: true,
       url: 'https://example.com/image2.png',
       size: 30,
-    } as unknown as __esri.CIMPictureMarker
+    }
 
-    const mockSymbol = {
+    const mockSymbol: CIMPointSymbol = {
+      type: 'CIMPointSymbol',
       symbolLayers: [mockLayer1, mockLayer2],
-    } as unknown as __esri.CIMPointSymbol
+    }
 
     const createElSpy = vi.spyOn(svgElUtils, 'createEl')
-    createElSpy.mockImplementation(
-      (tag: string) =>
-        document.createElementNS(
-          'http://www.w3.org/2000/svg',
-          tag
-        ) as SVGElement
+    createElSpy.mockImplementation((tag: string) =>
+      document.createElementNS('http://www.w3.org/2000/svg', tag)
     )
 
     const spyAttrs = vi

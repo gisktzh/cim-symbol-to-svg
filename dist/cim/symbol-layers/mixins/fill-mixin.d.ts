@@ -1,10 +1,11 @@
+import { CIMFill } from '@arcgis/core/symbols/cim/types';
 import { AbstractCIMSymbolLayerTransformer } from '../abstract-cim-symbol-layer-transformer';
 import type { AbstractConstructor } from './types';
-export declare function FillMixin<T extends AbstractConstructor<AbstractCIMSymbolLayerTransformer<__esri.CIMGradientFill | __esri.CIMGradientStroke | __esri.CIMHatchFill | __esri.CIMPictureFill | __esri.CIMSolidFill>>>(Base: T): (abstract new (...args: any[]) => {
+export declare function FillMixin<C extends AbstractConstructor<AbstractCIMSymbolLayerTransformer<T>>, T extends CIMFill>(Base: C): (abstract new (...args: any[]) => {
     transformFill(fillValue: string | number[]): Attr[];
-    layer: __esri.CIMHatchFill | __esri.CIMPictureFill | __esri.CIMSolidFill | __esri.CIMGradientStroke | __esri.CIMGradientFill;
+    layer: T;
     globals: import("../../..").Globals;
     getSvgAttrs(): Attr[];
     getSvgElements(): SVGElement[] | null;
-}) & T;
+}) & C;
 //# sourceMappingURL=fill-mixin.d.ts.map

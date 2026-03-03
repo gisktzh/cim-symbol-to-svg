@@ -1,1 +1,1 @@
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../src/cim/animations/index.ts"],"names":[],"mappings":"AAOA,wBAAgB,oBAAoB,CAClC,SAAS,EAAE,MAAM,CAAC,kBAAkB,EACpC,KAAK,EAAE,MAAM,CAAC,cAAc,4BAgH7B"}
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../src/cim/animations/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAEL,kBAAkB,EAClB,mBAAmB,EACpB,MAAM,gCAAgC,CAAA;AAYvC,wBAAgB,oBAAoB,CAAC,CAAC,SAAS,kBAAkB,EAC/D,SAAS,EAAE,CAAC,EACZ,KAAK,EAAE,mBAAmB,4BAgI3B"}

@@ -1,23 +1,12 @@
-import { Globals } from '../..'
+import { CIMMarkerGraphic } from '@arcgis/core/symbols/cim/types'
+import { Globals } from '@/index'
 import { round } from '../../utils/round'
 import { cimLineSymbolToSvg } from '../symbols/cim-line-symbol'
 import { cimPointSymbolToSvg } from '../symbols/cim-point-symbol'
 import { cimPolygonSymbolToSvg } from '../symbols/cim-polygon-symbol'
 import { cimTextSymbolToSvg } from '../symbols/cim-text-symbol'
-
-type Path = [number, number][]
-type Paths = Path[]
-
-// The difference between paths and rings is that rings are closed. In SVG speech this is `Z` at the end.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isRings(geometry: any): geometry is { rings: Paths } {
-  return !!geometry.rings
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isPaths(geometry: any): geometry is { paths: Paths } {
-  return !!geometry.paths
-}
+import { Extent } from '@arcgis/core/portal/jsonTypes'
+import { isPaths, isRings, Paths } from '@/typeguards/paths'
 
 function translateToSize(n: number, min: number, max: number, size: number) {
   return ((n - min) / (max - min)) * size
@@ -26,7 +15,7 @@ function translateToSize(n: number, min: number, max: number, size: number) {
 function pathsToSvgSyntax(
   paths: Paths,
   closePaths: boolean,
-  frame: __esri.Envelope,
+  frame: Extent,
   symbolHeight: number,
   symbolWidth: number,
   xOffset: number = 0,
@@ -58,27 +47,27 @@ function pathsToSvgSyntax(
 }
 
 export function transformMarkerGraphicToSvg(
-  graphic: __esri.CIMMarkerGraphic,
-  frame: __esri.Envelope,
+  graphic: CIMMarkerGraphic,
+  frame: Extent,
   globals: Globals,
   xOffset: number = 0,
   yOffset: number = 0
 ) {
-  if (graphic.symbol.type === 'CIMLineSymbol') {
+  if (graphic.symbol?.type === 'CIMLineSymbol') {
     // Could have a geometry but most often doesn't, at least the ESRI symbols don't.
     return cimLineSymbolToSvg(graphic.symbol, globals)
   }
 
-  if (graphic.symbol.type === 'CIMPointSymbol') {
+  if (graphic.symbol?.type === 'CIMPointSymbol') {
     // Could have a geometry but most often doesn't, at least the ESRI symbols don't.
     return cimPointSymbolToSvg(graphic.symbol, globals)
   }
 
-  if (graphic.symbol.type === 'CIMTextSymbol') {
+  if (graphic.symbol?.type === 'CIMTextSymbol') {
     return cimTextSymbolToSvg(graphic.symbol, graphic.textString)
   }
 
-  if (graphic.symbol.type === 'CIMPolygonSymbol') {
+  if (graphic.symbol?.type === 'CIMPolygonSymbol') {
     const el = cimPolygonSymbolToSvg(graphic.symbol, globals)
 
     if (

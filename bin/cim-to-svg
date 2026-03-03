@@ -1,0 +1,49 @@
+#!/usr/bin/env node
+
+import fs from 'fs'
+import path from 'path'
+import { JSDOM } from 'jsdom'
+import cimSymbolToSVG from '../dist/index.js'
+
+const { window } = new JSDOM(`<!DOCTYPE html><body></body>`)
+global.window = window
+global.document = window.document
+global.DOMParser = window.DOMParser
+global.XMLSerializer = window.XMLSerializer
+
+async function main() {
+  const args = process.argv.slice(2)
+  if (args.length === 0) {
+    console.error('Usage: cim-to-svg <input.json> [--out <output.svg>]')
+    process.exit(1)
+  }
+
+  const inputPath = args[0]
+  const outIndex = args.indexOf('--out')
+  const outputPath = outIndex !== -1 && args[outIndex + 1] ? args[outIndex + 1] : null
+
+  try {
+    const fullPath = path.resolve(process.cwd(), inputPath)
+    const raw = await fs.promises.readFile(fullPath, 'utf8')
+    const cimObject = JSON.parse(raw)
+
+    // Convert CIMSymbol(s) to SVG
+    const svgElement = cimSymbolToSVG(cimObject)
+
+    document.body.appendChild(svgElement)
+    const svg = document.body.innerHTML
+
+    if (outputPath) {
+      await fs.promises.writeFile(outputPath, svg, 'utf8')
+      console.log(`Saved SVG to ${outputPath}`)
+    } else {
+      // Print result to stdout
+      process.stdout.write(svg)
+    }
+  } catch (err) {
+    console.error('Error:', err.message)
+    process.exit(2)
+  }
+}
+
+main()

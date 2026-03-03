@@ -1,10 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import {
-  CIMGradientStrokeTransformer,
-  isCIMGradientStroke,
-} from '@/cim/symbol-layers/cim-gradient-stroke'
+import { CIMGradientStrokeTransformer } from '@/cim/symbol-layers/cim-gradient-stroke'
 import * as svgElUtils from '@/utils/svg-el'
 import type { Globals } from '@/index'
+import { CIMGradientStroke } from '@arcgis/core/symbols/cim/types'
+import * as logging from '@/utils/logging'
 
 describe('CIMGradientStrokeTransformer', () => {
   const fakeDefs: SVGDefsElement[] = []
@@ -13,40 +12,30 @@ describe('CIMGradientStrokeTransformer', () => {
     defs: fakeDefs,
   }
 
-  const fakeLayer = {
+  const fakeLayer: CIMGradientStroke = {
     type: 'CIMGradientStroke',
     colorRamp: {
       type: 'CIMLinearContinuousColorRamp',
       fromColor: [0, 0, 0, 1],
       toColor: [255, 255, 255, 1],
     },
-    gradientMethod: 'Linear',
+    gradientMethod: 'AcrossLine',
     width: 4,
     capStyle: 'Round',
     joinStyle: 'Miter',
     miterLimit: 10,
     gradientSize: 100,
     gradientSizeUnits: 'Relative',
-  } as unknown as __esri.CIMGradientStroke
+    enable: false,
+  }
 
   beforeEach(() => {
     fakeDefs.length = 0
   })
 
-  it('should detect CIMGradientStroke layer', () => {
-    expect(
-      isCIMGradientStroke({
-        type: 'CIMGradientStroke',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(true)
-    expect(
-      isCIMGradientStroke({
-        type: 'CIMSolidStroke',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(false)
-  })
-
   it('should transform gradient and stroke', () => {
+    const warnSpy = vi.spyOn(logging, 'warn').mockImplementation(() => {})
+
     const createElSpy = vi.spyOn(svgElUtils, 'createEl')
     createElSpy.mockImplementation((tag: string) =>
       document.createElementNS('http://www.w3.org/2000/svg', tag)
@@ -61,6 +50,9 @@ describe('CIMGradientStrokeTransformer', () => {
     )
     expect(attrs.find((a: Attr) => a.name === 'stroke-width')?.value).toBe('4')
     expect(fakeDefs.length).toBeGreaterThan(0)
+    expect(warnSpy).toHaveBeenCalledWith(
+      'AcrossLine gradients are currently not supported'
+    )
 
     createElSpy.mockRestore()
   })

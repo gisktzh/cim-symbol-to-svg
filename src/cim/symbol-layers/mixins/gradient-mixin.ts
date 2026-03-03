@@ -3,17 +3,25 @@ import { rgbaArrayToHex } from '../../../utils/color'
 import { createEl } from '../../../utils/svg-el'
 import { AbstractCIMSymbolLayerTransformer } from '../abstract-cim-symbol-layer-transformer'
 import type { AbstractConstructor } from './types'
+import {
+  CIMFixedColorRamp,
+  CIMGradientFill,
+  CIMGradientStroke,
+  CIMLinearContinuousColorRamp,
+  CIMMultipartColorRamp,
+} from '@arcgis/core/symbols/cim/types'
 
 export function GradientMixin<
-  T extends AbstractConstructor<
-    AbstractCIMSymbolLayerTransformer<
-      __esri.CIMGradientFill | __esri.CIMGradientStroke
-    >
+  C extends AbstractConstructor<
+    AbstractCIMSymbolLayerTransformer<CIMGradientFill | CIMGradientStroke>
   >,
->(Base: T) {
+>(Base: C) {
   abstract class MixinClass extends Base {
     getStops(
-      colorRamp: __esri.CIMColorRamp,
+      colorRamp:
+        | CIMLinearContinuousColorRamp
+        | CIMFixedColorRamp
+        | CIMMultipartColorRamp,
       startOffset: number,
       endOffset: number
     ): SVGStopElement[] {

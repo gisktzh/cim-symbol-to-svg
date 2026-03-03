@@ -8,32 +8,30 @@ vi.mock('@/utils/svg-el', () => ({
 }))
 
 import { createEl } from '@/utils/svg-el'
+import {
+  CIMPictureMarker,
+  CIMSymbolAnimationSize,
+  CIMVectorMarker,
+} from '@arcgis/core/symbols/cim/types'
 
 describe('getSizeAnimationElement', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  it('returns null for unsupported layer types', () => {
-    const animation = { toSize: 20 } as unknown as __esri.CIMSymbolAnimationSize
-    const layer = {
-      type: 'CIMSolidFill',
-      size: 10,
-    } as unknown as __esri.CIMSymbolLayer
-
-    const result = getSizeAnimationElement(animation, layer)
-    expect(result).toBeNull()
-    expect(createEl).not.toHaveBeenCalled()
-  })
-
   it('creates an animateTransform element for CIMPictureMarker', () => {
-    const animation = { toSize: 20 } as unknown as __esri.CIMSymbolAnimationSize
-    const layer = {
+    const animation: CIMSymbolAnimationSize = {
+      type: 'CIMSymbolAnimationSize',
+      toSize: 20,
+    }
+    const layer: CIMPictureMarker = {
       type: 'CIMPictureMarker',
       size: 10,
-    } as unknown as __esri.CIMSymbolLayer
+      url: '',
+      enable: true,
+    }
 
-    const el = getSizeAnimationElement(animation, layer) as SVGElement
+    const el = getSizeAnimationElement(animation, layer)
 
     expect(createEl).toHaveBeenCalledWith('animateTransform')
     expect(el.tagName).toBe('animateTransform')
@@ -44,27 +42,41 @@ describe('getSizeAnimationElement', () => {
   })
 
   it('creates an animateTransform element for CIMVectorMarker', () => {
-    const animation = { toSize: 15 } as unknown as __esri.CIMSymbolAnimationSize
-    const layer = {
+    const animation: CIMSymbolAnimationSize = {
+      type: 'CIMSymbolAnimationSize',
+      toSize: 15,
+    }
+    const layer: CIMVectorMarker = {
       type: 'CIMVectorMarker',
       size: 5,
-    } as unknown as __esri.CIMSymbolLayer
+      frame: {
+        xmin: 0,
+        ymin: 0,
+        xmax: 0,
+        ymax: 0,
+      },
+      markerGraphics: [],
+      enable: false,
+    }
 
-    const el = getSizeAnimationElement(animation, layer) as SVGElement
+    const el = getSizeAnimationElement(animation, layer)
 
     expect(el.getAttribute('to')).toBe('3') // 15 / 5
   })
 
   it('handles fractional size values', () => {
-    const animation = {
+    const animation: CIMSymbolAnimationSize = {
+      type: 'CIMSymbolAnimationSize',
       toSize: 7.5,
-    } as unknown as __esri.CIMSymbolAnimationSize
-    const layer = {
+    }
+    const layer: CIMPictureMarker = {
       type: 'CIMPictureMarker',
       size: 2.5,
-    } as unknown as __esri.CIMSymbolLayer
+      url: '',
+      enable: false,
+    }
 
-    const el = getSizeAnimationElement(animation, layer) as SVGElement
+    const el = getSizeAnimationElement(animation, layer)
 
     expect(el.getAttribute('to')).toBe('3') // 7.5 / 2.5
   })

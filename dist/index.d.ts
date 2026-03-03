@@ -1,3 +1,4 @@
+import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
 type SVGDefsChild = SVGPatternElement | SVGLinearGradientElement | SVGRadialGradientElement | SVGClipPathElement | SVGMaskElement | SVGMarkerElement | SVGSymbolElement | SVGFilterElement | SVGStyleElement | SVGGElement;
 export type Globals = {
     defs: SVGDefsChild[];
@@ -6,6 +7,6 @@ export type Globals = {
         height: number;
     };
 };
-export default function cimSymbolToSVG(cimSymbol: __esri.CIMSymbol): SVGSVGElement | undefined;
+export default function cimSymbolToSVG(cimSymbol: CIMSymbol): SVGSVGElement | undefined;
 export {};
 //# sourceMappingURL=index.d.ts.map

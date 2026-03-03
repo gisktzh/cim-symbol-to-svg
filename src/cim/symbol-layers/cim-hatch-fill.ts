@@ -1,16 +1,11 @@
+import { CIMHatchFill } from '@arcgis/core/symbols/cim/types'
 import { createEl } from '../../utils/svg-el'
 import { cimLineSymbolToSvg } from '../symbols/cim-line-symbol'
 import { AbstractCIMSymbolLayerTransformer } from './abstract-cim-symbol-layer-transformer'
 import { FillMixin } from './mixins/fill-mixin'
 
-export function isCIMHatchFill(
-  layer: __esri.CIMSymbolLayer
-): layer is __esri.CIMHatchFill {
-  return layer.type === 'CIMHatchFill'
-}
-
 export class CIMHatchFillTransformer extends FillMixin(
-  AbstractCIMSymbolLayerTransformer<__esri.CIMHatchFill>
+  AbstractCIMSymbolLayerTransformer<CIMHatchFill>
 ) {
   getSvgAttrs() {
     const lineEl = cimLineSymbolToSvg(this.layer.lineSymbol, this.globals)
@@ -33,7 +28,7 @@ export class CIMHatchFillTransformer extends FillMixin(
 
     const pattern = createEl('pattern')
     pattern.setAttribute('patternUnits', 'userSpaceOnUse')
-    pattern.setAttribute('width', this.layer.separation.toString())
+    pattern.setAttribute('width', this.layer.separation?.toString() || '')
     pattern.setAttribute('height', patternHeight.toString())
 
     const uuid = crypto.randomUUID()

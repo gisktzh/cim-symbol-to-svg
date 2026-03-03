@@ -1,10 +1,11 @@
+import { CIMPictureMarker, CIMSolidFill, CIMSolidStroke, CIMVectorMarker } from '@arcgis/core/symbols/cim/types';
 import { AbstractCIMSymbolLayerTransformer } from '../abstract-cim-symbol-layer-transformer';
 import type { AbstractConstructor } from './types';
-export declare function AnimationsMixin<T extends AbstractConstructor<AbstractCIMSymbolLayerTransformer<__esri.CIMPictureMarker | __esri.CIMSolidFill | __esri.CIMSolidStroke | __esri.CIMVectorMarker>>>(Base: T): (abstract new (...args: any[]) => {
-    getAnimationElements(): SVGAnimateElement[] | undefined;
-    layer: __esri.CIMPictureMarker | __esri.CIMSolidFill | __esri.CIMSolidStroke | __esri.CIMVectorMarker;
+export declare function AnimationsMixin<C extends AbstractConstructor<AbstractCIMSymbolLayerTransformer<T>>, T extends CIMPictureMarker | CIMSolidFill | CIMSolidStroke | CIMVectorMarker>(Base: C): (abstract new (...args: any[]) => {
+    getAnimationElements(): SVGAnimateElement[];
+    layer: T;
     globals: import("../../..").Globals;
     getSvgAttrs(): Attr[];
     getSvgElements(): SVGElement[] | null;
-}) & T;
+}) & C;
 //# sourceMappingURL=animations-mixin.d.ts.map

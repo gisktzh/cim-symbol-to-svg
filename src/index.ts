@@ -1,3 +1,4 @@
+import CIMSymbol from '@arcgis/core/symbols/CIMSymbol'
 import { innerSymbolToSvg } from './cim/symbols'
 
 type SVGDefsChild =
@@ -20,7 +21,7 @@ export type Globals = {
   }
 }
 
-export default function cimSymbolToSVG(cimSymbol: __esri.CIMSymbol) {
+export default function cimSymbolToSVG(cimSymbol: CIMSymbol) {
   const globals: Globals = {
     defs: [],
     dimensions: {

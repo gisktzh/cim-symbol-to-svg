@@ -1,18 +1,18 @@
 import { AbstractCIMSymbolLayerTransformer } from './abstract-cim-symbol-layer-transformer';
-export declare function isCIMVectorMarker(layer: __esri.CIMSymbolLayer): layer is __esri.CIMVectorMarker;
+import { CIMVectorMarker } from '@arcgis/core/symbols/cim/types';
 declare const CIMVectorMarkerTransformer_base: (abstract new (...args: any[]) => {
-    getAnimationElements(): SVGAnimateElement[] | undefined;
-    layer: __esri.CIMPictureMarker | __esri.CIMSolidFill | __esri.CIMSolidStroke | __esri.CIMVectorMarker;
+    getAnimationElements(): SVGAnimateElement[];
+    layer: import("@arcgis/core/symbols/cim/types").CIMPictureMarker | CIMVectorMarker | import("@arcgis/core/symbols/cim/types").CIMSolidFill | import("@arcgis/core/symbols/cim/types").CIMSolidStroke;
     globals: import("../..").Globals;
     getSvgAttrs(): Attr[];
     getSvgElements(): SVGElement[] | null;
 }) & (abstract new (...args: any[]) => {
     getRotationAttrs(): Attr[];
-    layer: __esri.CIMPictureMarker | __esri.CIMVectorMarker;
+    layer: import("@arcgis/core/symbols/cim/types").CIMMarker;
     globals: import("../..").Globals;
     getSvgAttrs(): Attr[];
     getSvgElements(): SVGElement[] | null;
-}) & (abstract new (layer: __esri.CIMVectorMarker, globals: import("../..").Globals) => AbstractCIMSymbolLayerTransformer<__esri.CIMVectorMarker>);
+}) & (abstract new (layer: CIMVectorMarker, globals: import("../..").Globals) => AbstractCIMSymbolLayerTransformer<CIMVectorMarker>);
 export declare class CIMVectorMarkerTransformer extends CIMVectorMarkerTransformer_base {
     getSvgAttrs(): never[];
     getSvgElements(): (SVGPathElement | SVGUseElement | SVGTextElement)[];

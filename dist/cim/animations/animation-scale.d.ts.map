@@ -1,1 +1,1 @@
-{"version":3,"file":"animation-scale.d.ts","sourceRoot":"","sources":["../../../src/cim/animations/animation-scale.ts"],"names":[],"mappings":"AAEA,wBAAgB,wBAAwB,CACtC,SAAS,EAAE,MAAM,CAAC,uBAAuB,8BAS1C"}
+{"version":3,"file":"animation-scale.d.ts","sourceRoot":"","sources":["../../../src/cim/animations/animation-scale.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,uBAAuB,EAAE,MAAM,gCAAgC,CAAA;AAGxE,wBAAgB,wBAAwB,CAAC,SAAS,EAAE,uBAAuB,8BAQ1E"}

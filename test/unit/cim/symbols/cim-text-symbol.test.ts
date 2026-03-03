@@ -1,24 +1,22 @@
 import { describe, it, expect, vi } from 'vitest'
 import { cimTextSymbolToSvg } from '@/cim/symbols/cim-text-symbol'
 import * as svgElUtils from '@/utils/svg-el'
+import { CIMTextSymbol } from '@arcgis/core/symbols/cim/types'
 
 describe('cimTextSymbolToSvg', () => {
   it('should create a <text> element with innerHTML set to the provided textString', () => {
     const textString = 'Hello, world!'
 
     const createElSpy = vi.spyOn(svgElUtils, 'createEl')
-    createElSpy.mockImplementation(
-      (tag: string) =>
-        document.createElementNS(
-          'http://www.w3.org/2000/svg',
-          tag
-        ) as SVGElement
+    createElSpy.mockImplementation((tag: string) =>
+      document.createElementNS('http://www.w3.org/2000/svg', tag)
     )
 
-    const svgText = cimTextSymbolToSvg(
-      {} as unknown as __esri.CIMTextSymbol,
-      textString
-    )
+    const symbol: CIMTextSymbol = {
+      type: 'CIMTextSymbol',
+    }
+
+    const svgText = cimTextSymbolToSvg(symbol, textString)
 
     expect(svgText.tagName).toBe('text')
     expect(svgText.innerHTML).toBe(textString)
@@ -27,10 +25,11 @@ describe('cimTextSymbolToSvg', () => {
   })
 
   it('should create a <text> element with empty innerHTML if no textString is provided', () => {
-    const svgText = cimTextSymbolToSvg(
-      {} as unknown as __esri.CIMTextSymbol,
-      undefined
-    )
+    const symbol: CIMTextSymbol = {
+      type: 'CIMTextSymbol',
+    }
+
+    const svgText = cimTextSymbolToSvg(symbol, undefined)
 
     expect(svgText.tagName).toBe('text')
     expect(svgText.innerHTML).toBe('')

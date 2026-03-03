@@ -1,15 +1,12 @@
+import { CIMStroke } from '@arcgis/core/symbols/cim/types'
 import { createAttr } from '../../../utils/attr'
 import { rgbaArrayToHex } from '../../../utils/color'
 import { AbstractCIMSymbolLayerTransformer } from '../abstract-cim-symbol-layer-transformer'
 import type { AbstractConstructor } from './types'
 
 export function StrokeMixin<
-  T extends AbstractConstructor<
-    AbstractCIMSymbolLayerTransformer<
-      __esri.CIMGradientStroke | __esri.CIMSolidStroke | __esri.CIMPictureStroke
-    >
-  >,
->(Base: T) {
+  C extends AbstractConstructor<AbstractCIMSymbolLayerTransformer<CIMStroke>>,
+>(Base: C) {
   abstract class MixinClass extends Base {
     transformStroke(strokeValue: string | number[]) {
       return [

@@ -8,6 +8,7 @@ vi.mock('@/utils/svg-el', () => ({
 }))
 
 import { createEl } from '@/utils/svg-el'
+import { CIMSymbolAnimationScale } from '@arcgis/core/symbols/cim/types'
 
 describe('getScaleAnimationElement', () => {
   beforeEach(() => {
@@ -15,11 +16,12 @@ describe('getScaleAnimationElement', () => {
   })
 
   it('creates an animateTransform element with correct attributes', () => {
-    const animation = {
+    const animation: CIMSymbolAnimationScale = {
+      type: 'CIMSymbolAnimationScale',
       scaleFactor: 2,
-    } as unknown as __esri.CIMSymbolAnimationScale
+    }
 
-    const el = getScaleAnimationElement(animation) as SVGElement
+    const el = getScaleAnimationElement(animation)
 
     expect(createEl).toHaveBeenCalledWith('animateTransform')
     expect(el.tagName).toBe('animateTransform')
@@ -30,21 +32,23 @@ describe('getScaleAnimationElement', () => {
   })
 
   it('handles decimal scale factors correctly', () => {
-    const animation = {
+    const animation: CIMSymbolAnimationScale = {
+      type: 'CIMSymbolAnimationScale',
       scaleFactor: 1.5,
-    } as unknown as __esri.CIMSymbolAnimationScale
+    }
 
-    const el = getScaleAnimationElement(animation) as SVGElement
+    const el = getScaleAnimationElement(animation)
 
     expect(el.getAttribute('to')).toBe('1.5')
   })
 
   it('handles scaleFactor of 0', () => {
-    const animation = {
+    const animation: CIMSymbolAnimationScale = {
+      type: 'CIMSymbolAnimationScale',
       scaleFactor: 0,
-    } as unknown as __esri.CIMSymbolAnimationScale
+    }
 
-    const el = getScaleAnimationElement(animation) as SVGElement
+    const el = getScaleAnimationElement(animation)
 
     expect(el.getAttribute('to')).toBe('0')
   })

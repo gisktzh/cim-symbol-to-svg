@@ -2,17 +2,10 @@ import { AbstractCIMSymbolLayerTransformer } from './abstract-cim-symbol-layer-t
 import { PictureMixin } from './mixins/picture-mixin'
 import { MarkerMixin } from './mixins/marker-mixin'
 import { AnimationsMixin } from './mixins/animations-mixin'
-
-export function isCIMPictureMarker(
-  layer: __esri.CIMSymbolLayer
-): layer is __esri.CIMPictureMarker {
-  return layer.type === 'CIMPictureMarker'
-}
+import { CIMPictureMarker } from '@arcgis/core/symbols/cim/types'
 
 export class CIMPictureMarkerTransformer extends AnimationsMixin(
-  MarkerMixin(
-    PictureMixin(AbstractCIMSymbolLayerTransformer<__esri.CIMPictureMarker>)
-  )
+  MarkerMixin(PictureMixin(AbstractCIMSymbolLayerTransformer<CIMPictureMarker>))
 ) {
   getSvgAttrs() {
     return []
@@ -35,8 +28,6 @@ export class CIMPictureMarkerTransformer extends AnimationsMixin(
 
     if (this.layer.size) {
       el.setAttribute('height', this.layer.size.toString())
-    } else if (this.layer.height) {
-      el.setAttribute('height', this.layer.height.toString())
     }
 
     if (this.layer.offsetX) {
@@ -48,9 +39,7 @@ export class CIMPictureMarkerTransformer extends AnimationsMixin(
     }
 
     const animationEls = this.getAnimationElements()
-    if (animationEls) {
-      animationEls.forEach((a) => el.appendChild(a.cloneNode(true)))
-    }
+    animationEls.forEach((a) => el.appendChild(a.cloneNode(true)))
 
     return [el]
   }

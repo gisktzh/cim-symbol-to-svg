@@ -1,10 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import {
-  CIMSolidStrokeTransformer,
-  isCIMSolidStroke,
-} from '@/cim/symbol-layers/cim-solid-stroke'
+import { CIMSolidStrokeTransformer } from '@/cim/symbol-layers/cim-solid-stroke'
 import * as animationsModule from '@/cim/animations'
 import type { Globals } from '@/index'
+import { CIMSolidStroke } from '@arcgis/core/symbols/cim/types'
 
 describe('CIMSolidStrokeTransformer', () => {
   const fakeDefs: SVGDefsElement[] = []
@@ -13,31 +11,24 @@ describe('CIMSolidStrokeTransformer', () => {
     defs: fakeDefs,
   }
 
-  const fakeLayer = {
+  const fakeLayer: CIMSolidStroke = {
     type: 'CIMSolidStroke',
     color: [0, 255, 0, 1],
     width: 2,
     capStyle: 'Round',
     joinStyle: 'Bevel',
     miterLimit: 10,
-    animations: [{ type: 'fade', duration: 1000 }],
-  } as unknown as __esri.CIMSolidStroke
+    animations: [
+      {
+        type: 'CIMSymbolAnimationColor',
+        toColor: [255, 255, 255, 255],
+      },
+    ],
+    enable: true,
+  }
 
   beforeEach(() => {
     fakeDefs.length = 0
-  })
-
-  it('should detect CIMSolidStroke layer', () => {
-    expect(
-      isCIMSolidStroke({
-        type: 'CIMSolidStroke',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(true)
-    expect(
-      isCIMSolidStroke({
-        type: 'CIMSolidFill',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(false)
   })
 
   it('should transform solid stroke to SVG attributes', () => {

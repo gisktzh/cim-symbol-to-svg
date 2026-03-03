@@ -8,6 +8,7 @@ vi.mock('@/utils/svg-el', () => ({
 }))
 
 import { createEl } from '@/utils/svg-el'
+import { CIMSymbolAnimationTransparency } from '@arcgis/core/symbols/cim/types'
 
 describe('getTransparencyAnimationElement', () => {
   beforeEach(() => {
@@ -15,11 +16,12 @@ describe('getTransparencyAnimationElement', () => {
   })
 
   it('creates an animate element with correct attributes', () => {
-    const animation = {
+    const animation: CIMSymbolAnimationTransparency = {
+      type: 'CIMSymbolAnimationTransparency',
       toTransparency: 0.3,
-    } as unknown as __esri.CIMSymbolAnimationTransparency
+    }
 
-    const el = getTransparencyAnimationElement(animation) as SVGElement
+    const el = getTransparencyAnimationElement(animation)
 
     expect(createEl).toHaveBeenCalledWith('animate')
     expect(el.tagName).toBe('animate')
@@ -29,20 +31,13 @@ describe('getTransparencyAnimationElement', () => {
     expect(el.getAttribute('to')).toBe('0.7') // 1 - 0.3
   })
 
-  it('defaults to 0 transparency if not defined', () => {
-    const animation = {} as unknown as __esri.CIMSymbolAnimationTransparency
-
-    const el = getTransparencyAnimationElement(animation) as SVGElement
-
-    expect(el.getAttribute('to')).toBe('1') // 1 - 0
-  })
-
   it('handles full transparency', () => {
-    const animation = {
+    const animation: CIMSymbolAnimationTransparency = {
+      type: 'CIMSymbolAnimationTransparency',
       toTransparency: 1,
-    } as unknown as __esri.CIMSymbolAnimationTransparency
+    }
 
-    const el = getTransparencyAnimationElement(animation) as SVGElement
+    const el = getTransparencyAnimationElement(animation)
 
     expect(el.getAttribute('to')).toBe('0') // 1 - 1
   })

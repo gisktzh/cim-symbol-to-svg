@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, Mock } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import cimSymbolToSVG from '@/index'
 
 vi.mock('@/cim/symbols', () => ({
@@ -6,12 +6,15 @@ vi.mock('@/cim/symbols', () => ({
 }))
 
 import { innerSymbolToSvg } from '@/cim/symbols'
+import CIMSymbol from '@arcgis/core/symbols/CIMSymbol'
 
 describe('cimSymbolToSVG', () => {
   it('should return an SVG element and update the global state correctly', () => {
-    const mockCIMSymbol = {
+    const mockCIMSymbol: CIMSymbol = {
       data: {
+        type: 'CIMSymbolReference',
         symbol: {
+          type: 'CIMPointSymbol',
           symbolLayers: [
             {
               enable: true,
@@ -21,14 +24,14 @@ describe('cimSymbolToSVG', () => {
           ],
         },
       },
-    } as unknown as __esri.CIMSymbol
+    } as CIMSymbol // Would want a _ton_ of other things implemented otherwise.
 
     const mockSvg = document.createElementNS(
       'http://www.w3.org/2000/svg',
       'svg'
     )
 
-    ;(innerSymbolToSvg as Mock).mockReturnValue(mockSvg)
+    vi.mocked(innerSymbolToSvg).mockReturnValue(mockSvg)
 
     const result = cimSymbolToSVG(mockCIMSymbol)
 

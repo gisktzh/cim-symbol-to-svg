@@ -1,10 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import {
-  CIMPictureStrokeTransformer,
-  isCIMPictureStroke,
-} from '@/cim/symbol-layers/cim-picture-stroke'
+import { CIMPictureStrokeTransformer } from '@/cim/symbol-layers/cim-picture-stroke'
 import * as svgElUtils from '@/utils/svg-el'
 import { Globals } from '@/index'
+import { CIMPictureStroke } from '@arcgis/core/symbols/cim/types'
 
 describe('CIMPictureStrokeTransformer', () => {
   const fakeDefs: SVGDefsElement[] = []
@@ -13,30 +11,18 @@ describe('CIMPictureStrokeTransformer', () => {
     defs: fakeDefs,
   }
 
-  const fakeLayer = {
+  const fakeLayer: CIMPictureStroke = {
     type: 'CIMPictureStroke',
     url: 'http://example.com/stroke.png',
     width: 5,
     capStyle: 'Round',
     joinStyle: 'Miter',
     miterLimit: 10,
-  } as unknown as __esri.CIMPictureStroke
+    enable: false,
+  }
 
   beforeEach(() => {
     fakeDefs.length = 0
-  })
-
-  it('should detect CIMPictureStroke layer', () => {
-    expect(
-      isCIMPictureStroke({
-        type: 'CIMPictureStroke',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(true)
-    expect(
-      isCIMPictureStroke({
-        type: 'CIMSolidFill',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(false)
   })
 
   it('should transform picture stroke to SVG attributes', () => {

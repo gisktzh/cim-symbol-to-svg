@@ -1,2 +1,3 @@
-export declare function getAnimationElements(animation: __esri.CIMSymbolAnimation, layer: __esri.CIMSymbolLayer): SVGAnimateElement | null;
+import { CIMSymbolAnimation, CIMSymbolLayerUnion } from '@arcgis/core/symbols/cim/types';
+export declare function getAnimationElements<T extends CIMSymbolAnimation>(animation: T, layer: CIMSymbolLayerUnion): SVGAnimateElement | null;
 //# sourceMappingURL=index.d.ts.map

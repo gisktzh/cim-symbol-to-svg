@@ -1,14 +1,12 @@
+import { CIMMarker } from '@arcgis/core/symbols/cim/types'
 import { createAttr } from '../../../utils/attr'
 import { AbstractCIMSymbolLayerTransformer } from '../abstract-cim-symbol-layer-transformer'
 import type { AbstractConstructor } from './types'
 
 export function MarkerMixin<
-  T extends AbstractConstructor<
-    AbstractCIMSymbolLayerTransformer<
-      __esri.CIMPictureMarker | __esri.CIMVectorMarker
-    >
-  >,
->(Base: T) {
+  C extends AbstractConstructor<AbstractCIMSymbolLayerTransformer<T>>,
+  T extends CIMMarker,
+>(Base: C) {
   abstract class MixinClass extends Base {
     getRotationAttrs() {
       const attrs: Attr[] = []
@@ -18,7 +16,7 @@ export function MarkerMixin<
           createAttr(
             'transform',
             `rotate(${(this.layer.rotateClockwise ? 1 : -1) * this.layer.rotation})`
-          ),
+          )
         )
 
         if (this.layer.anchorPoint) {
@@ -37,12 +35,7 @@ export function MarkerMixin<
             )
           )
         } else {
-          attrs.push(
-            createAttr(
-              'transform-origin',
-              'center',
-            )
-          )
+          attrs.push(createAttr('transform-origin', 'center'))
         }
       }
 

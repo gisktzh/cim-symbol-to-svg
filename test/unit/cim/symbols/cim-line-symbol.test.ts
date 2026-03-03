@@ -4,29 +4,27 @@ import * as cimSymbolLayers from '@/cim/symbol-layers'
 import * as svgElUtils from '@/utils/svg-el'
 import { Globals } from '@/index'
 import { createAttr } from '../../../test-utils/attr'
+import { CIMLineSymbol, CIMSolidStroke } from '@arcgis/core/symbols/cim/types'
 
 describe('cimLineSymbolToSvg', () => {
   const globals: Globals = { defs: [], dimensions: { width: -1, height: -1 } }
 
   it('should create a <line> element with correct attributes based on enabled symbol layers', () => {
-    const mockLayer = {
-      enable: true,
+    const mockLayer: CIMSolidStroke = {
       type: 'CIMSolidStroke',
-      color: [255, 0, 0],
+      enable: true,
+      color: [255, 0, 0, 255],
       width: 2,
-    } as unknown as __esri.CIMSolidStroke
+    }
 
-    const mockSymbol = {
+    const mockSymbol: CIMLineSymbol = {
+      type: 'CIMLineSymbol',
       symbolLayers: [mockLayer],
-    } as unknown as __esri.CIMLineSymbol
+    }
 
     const createElSpy = vi.spyOn(svgElUtils, 'createEl')
-    createElSpy.mockImplementation(
-      (tag: string) =>
-        document.createElementNS(
-          'http://www.w3.org/2000/svg',
-          tag
-        ) as SVGElement
+    createElSpy.mockImplementation((tag: string) =>
+      document.createElementNS('http://www.w3.org/2000/svg', tag)
     )
 
     const spyAttrs = vi
@@ -47,17 +45,21 @@ describe('cimLineSymbolToSvg', () => {
   })
 
   it('should not add any attributes when there are no enabled layers', () => {
-    const mockSymbol = {
-      symbolLayers: [{ enable: false }], // No enabled layer
-    } as unknown as __esri.CIMLineSymbol
+    const mockSymbol: CIMLineSymbol = {
+      type: 'CIMLineSymbol',
+      symbolLayers: [
+        {
+          type: 'CIMSolidStroke',
+          enable: false,
+          color: [255, 0, 0, 255],
+          width: 2,
+        },
+      ],
+    }
 
     const createElSpy = vi.spyOn(svgElUtils, 'createEl')
-    createElSpy.mockImplementation(
-      (tag: string) =>
-        document.createElementNS(
-          'http://www.w3.org/2000/svg',
-          tag
-        ) as SVGElement
+    createElSpy.mockImplementation((tag: string) =>
+      document.createElementNS('http://www.w3.org/2000/svg', tag)
     )
 
     const svgLine = cimLineSymbol.cimLineSymbolToSvg(mockSymbol, globals)
@@ -69,31 +71,28 @@ describe('cimLineSymbolToSvg', () => {
   })
 
   it('should handle multiple enabled layers correctly', () => {
-    const mockLayer1 = {
-      enable: true,
+    const mockLayer1: CIMSolidStroke = {
       type: 'CIMSolidStroke',
-      color: [255, 0, 0],
+      enable: true,
+      color: [255, 0, 0, 255],
       width: 2,
-    } as unknown as __esri.CIMSolidStroke
+    }
 
-    const mockLayer2 = {
-      enable: true,
+    const mockLayer2: CIMSolidStroke = {
       type: 'CIMSolidStroke',
-      color: [0, 0, 255],
+      enable: true,
+      color: [0, 0, 255, 255],
       width: 3,
-    } as unknown as __esri.CIMSolidStroke
+    }
 
-    const mockSymbol = {
+    const mockSymbol: CIMLineSymbol = {
+      type: 'CIMLineSymbol',
       symbolLayers: [mockLayer1, mockLayer2],
-    } as unknown as __esri.CIMLineSymbol
+    }
 
     const createElSpy = vi.spyOn(svgElUtils, 'createEl')
-    createElSpy.mockImplementation(
-      (tag: string) =>
-        document.createElementNS(
-          'http://www.w3.org/2000/svg',
-          tag
-        ) as SVGElement
+    createElSpy.mockImplementation((tag: string) =>
+      document.createElementNS('http://www.w3.org/2000/svg', tag)
     )
 
     const spyAttrs = vi

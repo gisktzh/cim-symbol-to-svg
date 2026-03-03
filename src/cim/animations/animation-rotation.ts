@@ -1,18 +1,15 @@
+import {
+  CIMHatchFill,
+  CIMMarker,
+  CIMPictureFill,
+  CIMSymbolAnimationRotation,
+} from '@arcgis/core/symbols/cim/types'
 import { createEl } from '../../utils/svg-el'
 
 export function getRotationAnimationElement(
-  animation: __esri.CIMSymbolAnimationRotation,
-  layer: __esri.CIMSymbolLayer
+  animation: CIMSymbolAnimationRotation,
+  layer: CIMMarker | CIMPictureFill | CIMHatchFill
 ) {
-  if (
-    layer.type !== 'CIMHatchFill' &&
-    layer.type !== 'CIMPictureFill' &&
-    layer.type !== 'CIMPictureMarker' &&
-    layer.type !== 'CIMVectorMarker'
-  ) {
-    return null
-  }
-
   let toRotation = animation.toRotation
   if (!animation.rotateClockwise) {
     toRotation *= -1

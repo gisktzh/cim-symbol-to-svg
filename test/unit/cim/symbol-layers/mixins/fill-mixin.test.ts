@@ -1,17 +1,18 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { FillMixin } from '@/cim/symbol-layers/mixins/fill-mixin'
 import { AbstractCIMSymbolLayerTransformer } from '@/cim/symbol-layers/abstract-cim-symbol-layer-transformer'
 import { Globals } from '@/index'
 import * as colorUtils from '@/utils/color'
 import * as attrUtils from '@/utils/attr'
+import { CIMFill } from '@arcgis/core/symbols/cim/types'
+
+class MockCIMSymbolLayer implements CIMFill {
+  type!: 'MockCIMSymbolLayer'
+  enable!: true
+}
 
 describe('FillMixin', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  class BaseTransformer extends AbstractCIMSymbolLayerTransformer<any> {
+  class BaseTransformer extends AbstractCIMSymbolLayerTransformer<MockCIMSymbolLayer> {
     getSvgAttrs() {
       return []
     }
@@ -24,8 +25,21 @@ describe('FillMixin', () => {
 
   it('returns fill attribute for string input', () => {
     const createAttrSpy = vi.spyOn(attrUtils, 'createAttr')
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const instance = new MixinClass({} as any, {} as Globals)
+
+    const layer: MockCIMSymbolLayer = {
+      type: 'MockCIMSymbolLayer',
+      enable: true,
+    }
+
+    const globals: Globals = {
+      defs: [],
+      dimensions: {
+        width: 0,
+        height: 0,
+      },
+    }
+
+    const instance = new MixinClass(layer, globals)
 
     const result = instance.transformFill('myGradient')
     expect(result).toHaveLength(1)
@@ -38,8 +52,20 @@ describe('FillMixin', () => {
     vi.spyOn(colorUtils, 'rgbaArrayToHex').mockReturnValue(fakeHex)
     const createAttrSpy = vi.spyOn(attrUtils, 'createAttr')
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const instance = new MixinClass({} as any, {} as Globals)
+    const layer: MockCIMSymbolLayer = {
+      type: 'MockCIMSymbolLayer',
+      enable: true,
+    }
+
+    const globals: Globals = {
+      defs: [],
+      dimensions: {
+        width: 0,
+        height: 0,
+      },
+    }
+
+    const instance = new MixinClass(layer, globals)
     const rgba: [number, number, number, number] = [17, 34, 51, 255]
 
     const result = instance.transformFill(rgba)

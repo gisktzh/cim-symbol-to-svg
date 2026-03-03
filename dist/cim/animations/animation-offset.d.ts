@@ -1,2 +1,3 @@
-export declare function getOffsetAnimationElement(animation: __esri.CIMSymbolAnimationOffset, layer: __esri.CIMSymbolLayer): SVGAnimateTransformElement | null;
+import { CIMHatchFill, CIMMarker, CIMPictureFill, CIMSymbolAnimationOffset } from '@arcgis/core/symbols/cim/types';
+export declare function getOffsetAnimationElement(animation: CIMSymbolAnimationOffset, layer: CIMMarker | CIMPictureFill | CIMHatchFill): SVGAnimateTransformElement;
 //# sourceMappingURL=animation-offset.d.ts.map

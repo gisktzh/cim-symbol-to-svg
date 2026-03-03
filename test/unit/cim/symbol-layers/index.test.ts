@@ -14,15 +14,27 @@ import { CIMHatchFillTransformer } from '@/cim/symbol-layers/cim-hatch-fill'
 import { CIMGradientStrokeTransformer } from '@/cim/symbol-layers/cim-gradient-stroke'
 import { CIMGradientFillTransformer } from '@/cim/symbol-layers/cim-gradient-fill'
 import { createAttr } from '../../../test-utils/attr'
+import {
+  CIMGradientFill,
+  CIMGradientStroke,
+  CIMHatchFill,
+  CIMPictureFill,
+  CIMPictureMarker,
+  CIMPictureStroke,
+  CIMSolidFill,
+  CIMSolidStroke,
+  CIMVectorMarker,
+} from '@arcgis/core/symbols/cim/types'
 
 describe('index.ts', () => {
   const globals: Globals = { defs: [], dimensions: { width: -1, height: -1 } }
 
   it('should call getSvgAttrs and return correct attributes for CIMSolidFill', () => {
-    const fakeLayer = {
+    const fakeLayer: CIMSolidFill = {
       type: 'CIMSolidFill',
-      color: 'red',
-    } as unknown as __esri.CIMSolidFill
+      color: [255, 0, 0, 255],
+      enable: true,
+    }
     const widthAttr = createAttr('stroke-width', '2')
     const spy = vi
       .spyOn(CIMSolidFillTransformer.prototype, 'getSvgAttrs')
@@ -34,10 +46,18 @@ describe('index.ts', () => {
   })
 
   it('should call getSvgElements and return correct elements for CIMVectorMarker', () => {
-    const vectorLayer = {
+    const vectorLayer: CIMVectorMarker = {
       type: 'CIMVectorMarker',
       markerGraphics: [],
-    } as unknown as __esri.CIMVectorMarker
+      frame: {
+        xmin: 0,
+        ymin: 0,
+        xmax: 0,
+        ymax: 0,
+      },
+      size: 0,
+      enable: true,
+    }
     const spy = vi
       .spyOn(CIMVectorMarkerTransformer.prototype, 'getSvgElements')
       .mockReturnValue([
@@ -51,10 +71,15 @@ describe('index.ts', () => {
   })
 
   it('should get the correct transformer and call getSvgAttrs for CIMGradientFill', () => {
-    const gradientFillLayer = {
+    const gradientFillLayer: CIMGradientFill = {
       type: 'CIMGradientFill',
-      colorRamp: {},
-    } as unknown as __esri.CIMGradientFill
+      colorRamp: {
+        type: 'CIMLinearContinuousColorRamp',
+        fromColor: [0, 0, 0, 1],
+        toColor: [255, 255, 255, 1],
+      },
+      enable: true,
+    }
     const strokeAttr = createAttr('stroke', 'url(#grad)')
     const spy = vi
       .spyOn(CIMGradientFillTransformer.prototype, 'getSvgAttrs')
@@ -66,10 +91,12 @@ describe('index.ts', () => {
   })
 
   it('should get the correct transformer and call getSvgElements for CIMPictureFill', () => {
-    const pictureFillLayer = {
+    const pictureFillLayer: CIMPictureFill = {
       type: 'CIMPictureFill',
       url: 'image.png',
-    } as unknown as __esri.CIMPictureFill
+      height: 0,
+      enable: true,
+    }
     const spy = vi
       .spyOn(CIMPictureFillTransformer.prototype, 'getSvgElements')
       .mockReturnValue(null)
@@ -80,10 +107,12 @@ describe('index.ts', () => {
   })
 
   it('should call getSvgAttrs for CIMSolidStroke', () => {
-    const solidStrokeLayer = {
+    const solidStrokeLayer: CIMSolidStroke = {
       type: 'CIMSolidStroke',
-      color: [0, 0, 255],
-    } as unknown as __esri.CIMSolidStroke
+      color: [0, 0, 255, 255],
+      width: 0,
+      enable: true,
+    }
     const strokeAttr = createAttr('stroke', '#0000ff')
     const spy = vi
       .spyOn(CIMSolidStrokeTransformer.prototype, 'getSvgAttrs')
@@ -95,10 +124,12 @@ describe('index.ts', () => {
   })
 
   it('should call getSvgElements for CIMPictureStroke', () => {
-    const pictureStrokeLayer = {
+    const pictureStrokeLayer: CIMPictureStroke = {
       type: 'CIMPictureStroke',
       url: 'stroke.png',
-    } as unknown as __esri.CIMPictureStroke
+      width: 0,
+      enable: true,
+    }
     const spy = vi
       .spyOn(CIMPictureStrokeTransformer.prototype, 'getSvgElements')
       .mockReturnValue(null)
@@ -109,10 +140,16 @@ describe('index.ts', () => {
   })
 
   it('should call getSvgAttrs for CIMGradientStroke', () => {
-    const gradientStrokeLayer = {
+    const gradientStrokeLayer: CIMGradientStroke = {
       type: 'CIMGradientStroke',
-      colorRamp: {},
-    } as unknown as __esri.CIMGradientStroke
+      colorRamp: {
+        type: 'CIMLinearContinuousColorRamp',
+        fromColor: [0, 0, 0, 1],
+        toColor: [255, 255, 255, 1],
+      },
+      width: 0,
+      enable: true,
+    }
     const strokeAttr = createAttr('stroke', 'url(#gradStroke)')
     const spy = vi
       .spyOn(CIMGradientStrokeTransformer.prototype, 'getSvgAttrs')
@@ -124,11 +161,14 @@ describe('index.ts', () => {
   })
 
   it('should call getSvgAttrs for CIMHatchFill', () => {
-    const hatchFillLayer = {
+    const hatchFillLayer: CIMHatchFill = {
       type: 'CIMHatchFill',
-      lineSymbol: {},
+      lineSymbol: {
+        type: 'CIMLineSymbol',
+      },
       separation: 10,
-    } as unknown as __esri.CIMHatchFill
+      enable: true,
+    }
     const strokeAttr = createAttr('stroke', '#ff0000')
     const spy = vi
       .spyOn(CIMHatchFillTransformer.prototype, 'getSvgAttrs')
@@ -140,11 +180,12 @@ describe('index.ts', () => {
   })
 
   it('should call getSvgAttrs for CIMPictureMarker', () => {
-    const pictureMarkerLayer = {
+    const pictureMarkerLayer: CIMPictureMarker = {
       type: 'CIMPictureMarker',
       size: 20,
       url: 'marker.png',
-    } as unknown as __esri.CIMPictureMarker
+      enable: true,
+    }
 
     const spy = vi
       .spyOn(CIMPictureMarkerTransformer.prototype, 'getSvgAttrs')
@@ -156,10 +197,12 @@ describe('index.ts', () => {
   })
 
   it('should call getSvgElements for CIMPictureMarker', () => {
-    const pictureMarkerLayer = {
+    const pictureMarkerLayer: CIMPictureMarker = {
       type: 'CIMPictureMarker',
-      markerGraphics: [],
-    } as unknown as __esri.CIMPictureMarker
+      url: 'marker.png',
+      size: 0,
+      enable: true,
+    }
     const spy = vi
       .spyOn(CIMPictureMarkerTransformer.prototype, 'getSvgElements')
       .mockReturnValue([
@@ -173,10 +216,18 @@ describe('index.ts', () => {
   })
 
   it('should call getSvgAttrs for CIMVectorMarker', () => {
-    const vectorMarkerLayer = {
+    const vectorMarkerLayer: CIMVectorMarker = {
       type: 'CIMVectorMarker',
       markerGraphics: [],
-    } as unknown as __esri.CIMVectorMarker
+      frame: {
+        xmin: 0,
+        ymin: 0,
+        xmax: 0,
+        ymax: 0,
+      },
+      size: 0,
+      enable: false,
+    }
     const spy = vi
       .spyOn(CIMVectorMarkerTransformer.prototype, 'getSvgAttrs')
       .mockReturnValue([])

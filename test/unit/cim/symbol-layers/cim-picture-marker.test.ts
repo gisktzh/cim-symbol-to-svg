@@ -1,10 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import {
-  CIMPictureMarkerTransformer,
-  isCIMPictureMarker,
-} from '@/cim/symbol-layers/cim-picture-marker'
+import { CIMPictureMarkerTransformer } from '@/cim/symbol-layers/cim-picture-marker'
 import * as svgElUtils from '@/utils/svg-el'
 import type { Globals } from '@/index'
+import { CIMPictureMarker } from '@arcgis/core/symbols/cim/types'
 
 describe('CIMPictureMarkerTransformer', () => {
   const fakeDefs: SVGDefsElement[] = []
@@ -13,13 +11,11 @@ describe('CIMPictureMarkerTransformer', () => {
     defs: fakeDefs,
   }
 
-  const fakeLayer = {
+  const fakeLayer: CIMPictureMarker = {
     type: 'CIMPictureMarker',
     url: 'http://example.com/marker.png',
     size: 24,
     scaleX: 2,
-    height: 30,
-    width: 20,
     offsetX: 5,
     offsetY: 10,
     rotation: 45,
@@ -27,23 +23,11 @@ describe('CIMPictureMarkerTransformer', () => {
     anchorPoint: { x: 50, y: 50 },
     anchorPointUnits: 'Relative',
     animations: [],
-  } as unknown as __esri.CIMPictureMarker
+    enable: true,
+  }
 
   beforeEach(() => {
     fakeDefs.length = 0
-  })
-
-  it('should detect CIMPictureMarker layer', () => {
-    expect(
-      isCIMPictureMarker({
-        type: 'CIMPictureMarker',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(true)
-    expect(
-      isCIMPictureMarker({
-        type: 'CIMSolidFill',
-      } as unknown as __esri.CIMSymbolLayer)
-    ).toBe(false)
   })
 
   it('should create image element with rotation and animation', () => {

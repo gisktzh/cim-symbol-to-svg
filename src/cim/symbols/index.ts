@@ -1,21 +1,22 @@
 import { getPathBBox } from '@/utils/path-bbox'
 import { Globals } from '../..'
-import { createAttr } from '../../utils/attr'
 import { warn } from '../../utils/logging'
 import { createEl } from '../../utils/svg-el'
 import { cimSymbolLayerToSvgElement } from '../symbol-layers'
-import { isCIMVectorMarker } from '../symbol-layers/cim-vector-marker'
+import { isCIMVectorMarker } from '../../typeguards/cim-vector-marker'
+import { CIMSymbolUnion } from '@arcgis/core/symbols/cim/types'
 
 export function innerSymbolToSvg(
-  symbol:
-    | __esri.CIMPointSymbol
-    | __esri.CIMLineSymbol
-    | __esri.CIMPolygonSymbol
-    | undefined,
+  symbol: CIMSymbolUnion | undefined | null,
   globals: Globals
 ) {
-  if (symbol === undefined) {
+  if (symbol === undefined || symbol === null) {
     warn('No symbol given - on purpose?')
+    return
+  }
+
+  if (symbol.type === 'CIMTextSymbol') {
+    warn('CIMTextSymbols are not implemented yet')
     return
   }
 
@@ -72,8 +73,7 @@ export function innerSymbolToSvg(
   const height =
     bboxes.reduce((p, c) => Math.max(p, c.maxY), -Infinity) + Math.abs(minY)
 
-  const viewBox = createAttr('viewBox', `${minX} ${minY} ${width} ${height}`)
-  svg.setAttributeNode(viewBox)
+  svg.setAttribute('viewBox', `${minX} ${minY} ${width} ${height}`)
 
   return svg
 }

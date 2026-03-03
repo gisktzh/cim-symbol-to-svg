@@ -1,19 +1,19 @@
+import { CIMGradientFill } from '@arcgis/core/symbols/cim/types';
 import { AbstractCIMSymbolLayerTransformer } from './abstract-cim-symbol-layer-transformer';
-export declare function isCIMGradientFill(layer: __esri.CIMSymbolLayer): layer is __esri.CIMGradientFill;
 declare const CIMGradientFillTransformer_base: (abstract new (...args: any[]) => {
-    getStops(colorRamp: __esri.CIMColorRamp, startOffset: number, endOffset: number): SVGStopElement[];
+    getStops(colorRamp: import("@arcgis/core/symbols/cim/types").CIMLinearContinuousColorRamp | import("@arcgis/core/symbols/cim/types").CIMFixedColorRamp | import("@arcgis/core/symbols/cim/types").CIMMultipartColorRamp, startOffset: number, endOffset: number): SVGStopElement[];
     transformGradient(): `${string}-${string}-${string}-${string}-${string}`;
-    layer: __esri.CIMGradientStroke | __esri.CIMGradientFill;
+    layer: CIMGradientFill | import("@arcgis/core/symbols/cim/types").CIMGradientStroke;
     globals: import("../..").Globals;
     getSvgAttrs(): Attr[];
     getSvgElements(): SVGElement[] | null;
 }) & (abstract new (...args: any[]) => {
     transformFill(fillValue: string | number[]): Attr[];
-    layer: __esri.CIMHatchFill | __esri.CIMPictureFill | __esri.CIMSolidFill | __esri.CIMGradientStroke | __esri.CIMGradientFill;
+    layer: import("@arcgis/core/symbols/cim/types").CIMFill;
     globals: import("../..").Globals;
     getSvgAttrs(): Attr[];
     getSvgElements(): SVGElement[] | null;
-}) & (abstract new (layer: __esri.CIMGradientFill, globals: import("../..").Globals) => AbstractCIMSymbolLayerTransformer<__esri.CIMGradientFill>);
+}) & (abstract new (layer: CIMGradientFill, globals: import("../..").Globals) => AbstractCIMSymbolLayerTransformer<CIMGradientFill>);
 export declare class CIMGradientFillTransformer extends CIMGradientFillTransformer_base {
     getSvgAttrs(): Attr[];
     getSvgElements(): null;

@@ -1,15 +1,15 @@
+import {
+  CIMSolidFill,
+  CIMSolidStroke,
+  CIMSymbolAnimationColor,
+} from '@arcgis/core/symbols/cim/types'
 import { rgbaArrayToHex } from '../../utils/color'
 import { createEl } from '../../utils/svg-el'
 
 export function getColorAnimationElement(
-  animation: __esri.CIMSymbolAnimationColor,
-  layer: __esri.CIMSymbolLayer
+  animation: CIMSymbolAnimationColor,
+  layer: CIMSolidFill | CIMSolidStroke
 ) {
-  if (layer.type !== 'CIMSolidFill' && layer.type !== 'CIMSolidStroke') {
-    // All other layer types do not support color animation
-    return null
-  }
-
   const el = createEl('animate')
   el.setAttribute('additive', 'sum')
 
@@ -18,7 +18,7 @@ export function getColorAnimationElement(
     layer.type === 'CIMSolidFill' ? 'fill' : 'stroke'
   )
   el.setAttribute('from', rgbaArrayToHex(layer.color))
-  el.setAttribute('to', animation.toColor.toHex())
+  el.setAttribute('to', rgbaArrayToHex(animation.toColor))
 
   return el
 }

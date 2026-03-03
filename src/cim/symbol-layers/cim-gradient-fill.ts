@@ -1,15 +1,10 @@
+import { CIMGradientFill } from '@arcgis/core/symbols/cim/types'
 import { AbstractCIMSymbolLayerTransformer } from './abstract-cim-symbol-layer-transformer'
 import { FillMixin } from './mixins/fill-mixin'
 import { GradientMixin } from './mixins/gradient-mixin'
 
-export function isCIMGradientFill(
-  layer: __esri.CIMSymbolLayer
-): layer is __esri.CIMGradientFill {
-  return layer.type === 'CIMGradientFill'
-}
-
 export class CIMGradientFillTransformer extends GradientMixin(
-  FillMixin(AbstractCIMSymbolLayerTransformer<__esri.CIMGradientFill>)
+  FillMixin(AbstractCIMSymbolLayerTransformer<CIMGradientFill>)
 ) {
   getSvgAttrs() {
     const fillUuid = this.transformGradient()

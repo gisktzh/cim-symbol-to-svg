@@ -2,15 +2,10 @@ import { transformMarkerGraphicToSvg } from '../graphics/cim-marker-graphic'
 import { AbstractCIMSymbolLayerTransformer } from './abstract-cim-symbol-layer-transformer'
 import { MarkerMixin } from './mixins/marker-mixin'
 import { AnimationsMixin } from './mixins/animations-mixin'
-
-export function isCIMVectorMarker(
-  layer: __esri.CIMSymbolLayer
-): layer is __esri.CIMVectorMarker {
-  return layer.type === 'CIMVectorMarker'
-}
+import { CIMVectorMarker } from '@arcgis/core/symbols/cim/types'
 
 export class CIMVectorMarkerTransformer extends AnimationsMixin(
-  MarkerMixin(AbstractCIMSymbolLayerTransformer<__esri.CIMVectorMarker>)
+  MarkerMixin(AbstractCIMSymbolLayerTransformer<CIMVectorMarker>)
 ) {
   getSvgAttrs() {
     return []
@@ -29,19 +24,21 @@ export class CIMVectorMarkerTransformer extends AnimationsMixin(
 
     const rotationAttrs = this.getRotationAttrs()
     if (rotationAttrs.length) {
-      graphics.forEach((g) =>
-        rotationAttrs.forEach((a) =>
-          g!.setAttributeNode(a.cloneNode(true) as Attr)
+      graphics
+        .filter((g) => !!g)
+        .forEach((g) =>
+          rotationAttrs.forEach((a) => {
+            g.setAttribute(a.name, a.value)
+          })
         )
-      )
     }
 
     const animationEls = this.getAnimationElements()
-    if (animationEls) {
-      graphics.forEach((g) =>
-        animationEls.forEach((a) => g!.appendChild(a.cloneNode(true)))
-      )
-    }
+    animationEls.forEach((a) =>
+      graphics.forEach((g) => {
+        g!.appendChild(a.cloneNode(true))
+      })
+    )
 
     return graphics.filter((g) => !!g)
   }

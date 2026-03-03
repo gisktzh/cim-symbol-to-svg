@@ -2,12 +2,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { StrokeMixin } from '@/cim/symbol-layers/mixins/stroke-mixin'
 import { AbstractCIMSymbolLayerTransformer } from '@/cim/symbol-layers/abstract-cim-symbol-layer-transformer'
 import * as attrUtils from '@/utils/attr'
+import { CIMStroke } from '@arcgis/core/symbols/cim/types'
 
 describe('StrokeMixin', () => {
   const createAttrSpy = vi.spyOn(attrUtils, 'createAttr')
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const Base = class extends AbstractCIMSymbolLayerTransformer<any> {
+  const Base = class extends AbstractCIMSymbolLayerTransformer<CIMStroke> {
     getSvgAttrs() {
       return []
     }
@@ -23,11 +23,12 @@ describe('StrokeMixin', () => {
   })
 
   it('should transform stroke with string value', () => {
-    const layer = {
+    const layer: CIMStroke = {
       width: 5,
       capStyle: 'Round',
       joinStyle: 'Bevel',
       miterLimit: 10,
+      enable: false,
     }
     const instance = new MixinClass(layer, {
       defs: [],
@@ -45,11 +46,12 @@ describe('StrokeMixin', () => {
   })
 
   it('should transform stroke with rgba array', () => {
-    const layer = {
+    const layer: CIMStroke = {
       width: 2,
       capStyle: undefined,
       joinStyle: undefined,
       miterLimit: undefined,
+      enable: false,
     }
     const instance = new MixinClass(layer, {
       defs: [],

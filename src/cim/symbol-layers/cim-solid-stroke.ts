@@ -1,15 +1,10 @@
 import { AbstractCIMSymbolLayerTransformer } from './abstract-cim-symbol-layer-transformer'
 import { StrokeMixin } from './mixins/stroke-mixin'
 import { AnimationsMixin } from './mixins/animations-mixin'
-
-export function isCIMSolidStroke(
-  layer: __esri.CIMSymbolLayer
-): layer is __esri.CIMSolidStroke {
-  return layer.type === 'CIMSolidStroke'
-}
+import { CIMSolidStroke } from '@arcgis/core/symbols/cim/types'
 
 export class CIMSolidStrokeTransformer extends AnimationsMixin(
-  StrokeMixin(AbstractCIMSymbolLayerTransformer<__esri.CIMSolidStroke>)
+  StrokeMixin(AbstractCIMSymbolLayerTransformer<CIMSolidStroke>)
 ) {
   getSvgAttrs() {
     return this.transformStroke(this.layer.color)
@@ -18,6 +13,6 @@ export class CIMSolidStrokeTransformer extends AnimationsMixin(
   getSvgElements() {
     const animations = this.getAnimationElements()
 
-    return animations ? animations : null
+    return animations.length > 0 ? animations : null
   }
 }

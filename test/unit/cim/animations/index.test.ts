@@ -1,5 +1,11 @@
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest'
-import { getAnimationElements } from '@/cim/animations'
+import {
+  CIMSolidFill,
+  CIMSymbolAnimation,
+  CIMSymbolAnimationColor,
+  CIMSymbolLayerUnion,
+} from '@arcgis/core/symbols/cim/types'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { getAnimationElements } from '../../../../src/cim/animations'
 
 const fakeEl = document.createElementNS('http://www.w3.org/2000/svg', 'animate')
 
@@ -22,12 +28,13 @@ vi.mock('@/cim/animations/animation-transparency', () => ({
   getTransparencyAnimationElement: vi.fn(() => fakeEl),
 }))
 
-import { getColorAnimationElement } from '@/cim/animations/animation-color'
-import { getOffsetAnimationElement } from '@/cim/animations/animation-offset'
-import { getRotationAnimationElement } from '@/cim/animations/animation-rotation'
-import { getScaleAnimationElement } from '@/cim/animations/animation-scale'
-import { getSizeAnimationElement } from '@/cim/animations/animation-size'
-import { getTransparencyAnimationElement } from '@/cim/animations/animation-transparency'
+import { getColorAnimationElement } from '../../../../src/cim/animations/animation-color'
+import { getOffsetAnimationElement } from '../../../../src/cim/animations/animation-offset'
+import { getRotationAnimationElement } from '../../../../src/cim/animations/animation-rotation'
+import { getScaleAnimationElement } from '../../../../src/cim/animations/animation-scale'
+import { getSizeAnimationElement } from '../../../../src/cim/animations/animation-size'
+import { getTransparencyAnimationElement } from '../../../../src/cim/animations/animation-transparency'
+import getOtherLayerTypes from '../../../test-utils/get-other-layer-types'
 
 describe('getAnimationElements', () => {
   beforeEach(() => {
@@ -35,73 +42,152 @@ describe('getAnimationElements', () => {
   })
 
   it('returns null if playAnimation is false', () => {
-    const animation: __esri.CIMSymbolAnimation = {
+    const animation: CIMSymbolAnimation = {
       type: 'CIMSymbolAnimationColor',
       animatedSymbolProperties: { playAnimation: false },
-    } as __esri.CIMSymbolAnimation
-    const layer: __esri.CIMSymbolLayer = {
+      toColor: [255, 255, 255, 255],
+    }
+    const layer: CIMSolidFill = {
       type: 'CIMSolidFill',
-    } as __esri.CIMSymbolLayer
+      color: [255, 255, 255, 255],
+      enable: true,
+    }
 
     expect(getAnimationElements(animation, layer)).toBeNull()
   })
 
   it('calls the correct generator based on animation type', () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-    const animationTypes: [__esri.CIMSymbolAnimation['type'], Function][] = [
-      ['CIMSymbolAnimationColor', getColorAnimationElement],
-      ['CIMSymbolAnimationOffset', getOffsetAnimationElement],
-      ['CIMSymbolAnimationRotation', getRotationAnimationElement],
-      ['CIMSymbolAnimationScale', getScaleAnimationElement],
-      ['CIMSymbolAnimationSize', getSizeAnimationElement],
-      ['CIMSymbolAnimationTransparency', getTransparencyAnimationElement],
+    const animationTypes: {
+      animation: CIMSymbolAnimation
+      callback: Function
+      acceptedLayerTypes: CIMSymbolLayerUnion['type'][]
+    }[] = [
+      {
+        animation: {
+          type: 'CIMSymbolAnimationColor',
+          toColor: [255, 255, 255, 255],
+          animatedSymbolProperties: { playAnimation: true },
+        },
+        callback: getColorAnimationElement,
+        acceptedLayerTypes: ['CIMSolidFill', 'CIMSolidStroke'],
+      },
+      {
+        animation: {
+          type: 'CIMSymbolAnimationOffset',
+          offsetX: 0,
+          offsetY: 0,
+          animatedSymbolProperties: { playAnimation: true },
+        },
+        callback: getOffsetAnimationElement,
+        acceptedLayerTypes: [
+          'CIMPictureMarker',
+          'CIMVectorMarker',
+          'CIMHatchFill',
+          'CIMPictureFill',
+        ],
+      },
+      {
+        animation: {
+          type: 'CIMSymbolAnimationRotation',
+          toRotation: 360,
+          animatedSymbolProperties: { playAnimation: true },
+        },
+        callback: getRotationAnimationElement,
+        acceptedLayerTypes: [
+          'CIMPictureMarker',
+          'CIMVectorMarker',
+          'CIMHatchFill',
+          'CIMPictureFill',
+        ],
+      },
+      {
+        animation: {
+          type: 'CIMSymbolAnimationScale',
+          scaleFactor: 1.2,
+          animatedSymbolProperties: { playAnimation: true },
+        },
+        callback: getScaleAnimationElement,
+        acceptedLayerTypes: [
+          'CIMGradientFill',
+          'CIMPictureMarker',
+          'CIMVectorMarker',
+          'CIMGradientStroke',
+          'CIMHatchFill',
+          'CIMPictureFill',
+          'CIMPictureStroke',
+          'CIMSolidFill',
+          'CIMSolidStroke',
+        ],
+      },
+      {
+        animation: {
+          type: 'CIMSymbolAnimationSize',
+          toSize: 42,
+          animatedSymbolProperties: { playAnimation: true },
+        },
+        callback: getSizeAnimationElement,
+        acceptedLayerTypes: ['CIMPictureMarker', 'CIMVectorMarker'],
+      },
+      {
+        animation: {
+          type: 'CIMSymbolAnimationTransparency',
+          toTransparency: 1,
+          animatedSymbolProperties: { playAnimation: true },
+        },
+        callback: getTransparencyAnimationElement,
+        acceptedLayerTypes: [
+          'CIMGradientFill',
+          'CIMPictureMarker',
+          'CIMVectorMarker',
+          'CIMGradientStroke',
+          'CIMHatchFill',
+          'CIMPictureFill',
+          'CIMPictureStroke',
+          'CIMSolidFill',
+          'CIMSolidStroke',
+        ],
+      },
     ]
 
-    const layer = {
-      type: 'CIMSolidFill',
-      size: 10,
-    } as unknown as __esri.CIMSolidFill
+    for (const { animation, callback, acceptedLayerTypes } of animationTypes) {
+      acceptedLayerTypes.forEach((layerType) => {
+        const layer: CIMSymbolLayerUnion = {
+          type: layerType,
+        } as CIMSymbolLayerUnion // Typesafety is given by `layerType`, as typeguards later on ensure that stuff works. That's what we're actually testing.
 
-    for (const [type, mockFn] of animationTypes) {
-      const animation: __esri.CIMSymbolAnimation = {
-        type,
-        animatedSymbolProperties: { playAnimation: true },
-      } as __esri.CIMSymbolAnimation
+        const el = getAnimationElements(animation, layer)
+        expect(callback).toHaveBeenCalled()
+        expect(el).toBe(fakeEl)
+      })
 
-      const el = getAnimationElements(animation, layer)
-      expect(mockFn).toHaveBeenCalled()
-      expect(el).toBe(fakeEl)
+      getOtherLayerTypes(acceptedLayerTypes).forEach((layerType) => {
+        const layer: CIMSymbolLayerUnion = {
+          type: layerType,
+        } as CIMSymbolLayerUnion // Typesafety is given by `layerType`, as typeguards later on ensure that stuff works. That's what we're actually testing.
+
+        expect(() => getAnimationElements(animation, layer)).toThrow()
+      })
     }
-  })
-
-  it('returns null if generator returns null', () => {
-    ;(getColorAnimationElement as Mock).mockReturnValueOnce(null)
-
-    const animation: __esri.CIMSymbolAnimation = {
-      type: 'CIMSymbolAnimationColor',
-      animatedSymbolProperties: { playAnimation: true },
-    } as __esri.CIMSymbolAnimation
-    const layer: __esri.CIMSymbolLayer = {
-      type: 'CIMSolidFill',
-    } as __esri.CIMSymbolLayer
-
-    expect(getAnimationElements(animation, layer)).toBeNull()
   })
 
   it('reverses from/to if reverseAnimation is true', () => {
     const el = document.createElementNS('http://www.w3.org/2000/svg', 'animate')
     el.setAttribute('from', '0')
     el.setAttribute('to', '1')
-    ;(getColorAnimationElement as Mock).mockReturnValueOnce(el)
+    vi.mocked(getColorAnimationElement).mockReturnValueOnce(el)
 
-    const animation: __esri.CIMSymbolAnimation = {
+    const animation: CIMSymbolAnimationColor = {
       type: 'CIMSymbolAnimationColor',
       animatedSymbolProperties: { playAnimation: true, reverseAnimation: true },
-    } as unknown as __esri.CIMSymbolAnimation
+      toColor: [255, 255, 255, 255],
+    }
 
-    const layer: __esri.CIMSymbolLayer = {
+    const layer: CIMSolidFill = {
       type: 'CIMSolidFill',
-    } as __esri.CIMSymbolLayer
+      color: [0, 0, 0, 0],
+      enable: false,
+    }
     const result = getAnimationElements(animation, layer)!
     expect(result.getAttribute('values')).toContain('1:0')
     expect(result.getAttribute('from')).toBeNull()
@@ -112,16 +198,19 @@ describe('getAnimationElements', () => {
     const el = document.createElementNS('http://www.w3.org/2000/svg', 'animate')
     el.setAttribute('from', '0')
     el.setAttribute('to', '1')
-    ;(getColorAnimationElement as Mock).mockReturnValueOnce(el)
+    vi.mocked(getColorAnimationElement).mockReturnValueOnce(el)
 
-    const animation: __esri.CIMSymbolAnimation = {
+    const animation: CIMSymbolAnimationColor = {
       type: 'CIMSymbolAnimationColor',
       animatedSymbolProperties: { playAnimation: true, repeatType: 'Loop' },
-    } as unknown as __esri.CIMSymbolAnimation
+      toColor: [255, 255, 255, 255],
+    }
 
-    const layer: __esri.CIMSymbolLayer = {
+    const layer: CIMSolidFill = {
       type: 'CIMSolidFill',
-    } as __esri.CIMSymbolLayer
+      color: [0, 0, 0, 0],
+      enable: false,
+    }
     const result = getAnimationElements(animation, layer)!
     expect(result.getAttribute('repeatCount')).toBe('indefinite')
   })
@@ -130,16 +219,19 @@ describe('getAnimationElements', () => {
     const el = document.createElementNS('http://www.w3.org/2000/svg', 'animate')
     el.setAttribute('from', '0')
     el.setAttribute('to', '1')
-    ;(getColorAnimationElement as Mock).mockReturnValueOnce(el)
+    vi.mocked(getColorAnimationElement).mockReturnValueOnce(el)
 
-    const animation: __esri.CIMSymbolAnimation = {
+    const animation: CIMSymbolAnimationColor = {
       type: 'CIMSymbolAnimationColor',
       animatedSymbolProperties: { playAnimation: true, startTimeOffset: 2 },
-    } as unknown as __esri.CIMSymbolAnimation
+      toColor: [255, 255, 255, 255],
+    }
 
-    const layer: __esri.CIMSymbolLayer = {
+    const layer: CIMSolidFill = {
       type: 'CIMSolidFill',
-    } as __esri.CIMSymbolLayer
+      color: [0, 0, 0, 0],
+      enable: false,
+    }
     const result = getAnimationElements(animation, layer)!
     expect(result.getAttribute('begin')).toBe('2s')
   })
