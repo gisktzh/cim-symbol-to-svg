@@ -12,7 +12,7 @@
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "format": "prettier --write .",
     "prepublishOnly": "npm run build",
-    "release": "bumpp && npm release --access public"
+    "release": "bumpp && npm publish --access public"
   },
   "bin": {
     "cim-to-svg": "./bin/cim-to-svg"
