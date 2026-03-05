@@ -7,10 +7,8 @@ Library to convert @arcgis/core `CIMSymbol`s to SVGs.
 To install the library, execute the following command in the project root:
 
 ```
-npm install https://github.com/gisktzh/cim-to-svg
+npm i @gisktzh/cim-symbol-to-svg
 ```
-
-We currently do not offer this library on npmjs, since it's still WIP and is subject to change.
 
 ## Usage
 
